@@ -55,14 +55,17 @@ class EOS_Driver:
         self.pwms[0].setAllPWM(0,PWM_ON)
         self.pwms[1].setAllPWM(0,PWM_ON)
     
-    def setOne(self, index, value):
+    def one(self, index, value):
         """set a specific light to a normalized value intensity (0-1)"""
         light = self.__getLightIndex(index)
         val = self.__getAbsValue(value)
         self.pwms[light[0]].setPWM(light[1], 0, val)
     
     def set(self, values):
-        """set all lights to the value in the """
+        """set all lights to the value in the list provided"""
+        for index, value in enumerate(values):
+            self.one(index, value)
+        
     def all(self, value):
         """set all lights to a specific normalized value intensity (0-1)"""
         map(lambda pwm: pwm.setAllPWM(0,self.__getAbsValue(value)), self.pwms)
@@ -70,15 +73,15 @@ class EOS_Driver:
     def only(self, index, value = 1):
         """turn on only the specific light, and turn all other lights off"""
         for light in range(0,NUM_LIGHTS):
-            self.setOne(light, value if index == light else LIGHT_OFF)
+            self.one(light, value if index == light else LIGHT_OFF)
     
     def on(self, index):
         """turn the light with specific index on (to maximum value)"""
-        self.setOne(index, LIGHT_ON)
+        self.one(index, LIGHT_ON)
     
     def off(self, index):
         """turn the light with specific index off"""
-        self.setOne(index, LIGHT_OFF)
+        self.one(index, LIGHT_OFF)
     
     def setFreq(self, freq):
         """set the PWM frequency (in Hz)"""
