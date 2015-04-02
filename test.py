@@ -1,6 +1,4 @@
 #!/usr/bin/python
-
-from lib.Adafruit_PWM_Servo_Driver import PWM
 from lib.Eos_Driver import EOS_Driver
 import time
 import atexit
@@ -22,7 +20,7 @@ def interactiveAll():
     newValue = raw_input('New value (0-4095): ')
     # convert to number
     intensity = int(float(newValue))
-    eos.setAll(intensity)
+    eos.all(intensity)
 
 def sweep(t = 1):
     print "sweeping the leds with a predefined time (%s sec)" % t
@@ -76,11 +74,15 @@ def blinkTest():
     blinkLight(4)
     blinkLight(5, .5)
     blinkLight(6)
+    
+def setSomeRandomValues():
+    eos.set([0,0,0,1,0,0,.5,.3,.2,.1,0,0,0,1,0,1,0])
 
 # main program
 progressiveIntensity()
 progressiveIntensityOne(1)
 sweep()
 blinkTest()
+setSomeRandomValues()
+time.sleep(10)
 interactiveAll()
-    
