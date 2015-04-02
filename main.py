@@ -77,8 +77,10 @@ def blinkTest():
     blinkLight(5, .5)
     blinkLight(6)
 
-while(True):
-    progressiveIntensityOne(1)
-    sweep()
-    blinkTest()
+# main program
+progressiveIntensity()
+progressiveIntensityOne(1)
+sweep()
+blinkTest()
+interactiveAll()
     
