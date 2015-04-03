@@ -11,22 +11,28 @@ eos = EOS_Driver()
 def allOff(opts):
     eos.allOff()
     return "all lights turned off"
+
 def allOn(opts):
     eos.allOn()
     return "all lights turned on"
+
 def one(opts):
     eos.one(int(opts[0]), float(opts[1]))
     return "light %s turned to intensity %s" % (opts[0], opts[1])
+
 def set(opts):
     # convert opts to a list of floats
     eos.set(map(lambda o: float(o), opts))
     return "lights set to" % opts
+
 def all(opts):
     eos.all(float(opts[0]))
     return "set all lights to intensity %s" % opts[0]
+
 def only(opts):
     eos.only(int(opts[0]), float(opts[1]))
     return "turn on only light %s to intensity %s" % (opts[0],opts[1])
+
 def on(opts=None):
     if opts != None and opts != []:
         eos.on(int(opts[0]))
@@ -34,6 +40,7 @@ def on(opts=None):
     else:
         eos.allOn()
         return "all lights turned on"
+
 def off(opts=None):
     if opts != None and opts != []:
         eos.off(int(opts[0]))
@@ -41,6 +48,7 @@ def off(opts=None):
     else:
         eos.allOff()
         return "all lights turned off"
+
 def setFreq(opts):
     eos.setFreq(int(opts[0]))
     return "setting a new frequency to " % opts[0]

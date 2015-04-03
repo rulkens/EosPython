@@ -1,49 +1,68 @@
 <!DOCTYPE html>
-   <head>
-      <title>{{ title }}</title>
-      <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-      <script>
-      $(document).ready(function(){
-        
-        $('[data-slider]').slider({
-          value: 5,
-          min: 0,
-          max: 32,
-          step: 1,
-          slide: function( event, ui ) {
-            callApi('only', [ui.value, 1]);
-            }
-        });
-        
-        // setup button click handlers
-        $('[data-action]').click(function(item){
-          var action = $(this).data('action');
-          // make an AJAX call to the proper API route
-          callApi(action);
-        });
-        
-        function callApi(action, arguments, cb){
-          var path = '/api/' + action;
-          path += arguments ? '/' + arguments.join(',') : '';
-          
-          $.getJSON(path, function(ret){
-            console.log(ret);
-            if(cb) cb(ret); // do a callback if you want it
-          });
-        }
-      });
-      </script>
-   </head>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-   <body>
-      <h1>Welcome to the EOS control panel</h1>
-      <h2>The date and time on the server is: {{ time }}</h2>
-      <p>
-        <button data-action="allon">Turn all lights on</button>
-        <button data-action="alloff">Turn all lights off</button>
-        <div data-slider></div>
-      </p>
-   </body>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+    <link href="/vendor/seiyria-bootstrap-slider/css/bootstrap-slider.css" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+<header>
+    <nav>
+        <div class="container">
+            <h1>EOS control panel</h1>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="row">
+            <label>
+                <input type="checkbox" data-toggle="toggle" data-size="large" id="lightsToggle">
+                Toggle the lights on/off
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                <input type="number"
+                       id="intensitySlider"
+                       data-slider-id="intensitySlider"
+                       data-slider-min="0"
+                       data-slider-max="1"
+                       data-slider-step="0.01"
+                       data-slider-value="0"/>
+                Intensity
+            </label>
+        </div>
+
+        <div class="row">
+            <label>
+                <input type="number"
+                       id="stepSlider"
+                       data-slider-id="stepSlider"
+                       data-slider-min="0"
+                       data-slider-max="31"
+                       data-slider-step="1"
+                       data-slider-value="0"/>
+                Sweep
+            </label>
+        </div>
+
+    </div>
+</main>
+<footer>
+    <pre>The date and time on the server is: {{ time }}</pre>
+</footer>
+
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
+<script src="/vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js"></script>
+<script src="/eos.js"></script>
+<script src="/main.js"></script>
+
+</body>
 </html>

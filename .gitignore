@@ -1,2 +1,4 @@
 *.pyc
 ._*
+.idea
+public/vendor

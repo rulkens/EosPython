@@ -9,14 +9,14 @@ from api import EOS_API
 import datetime
 
 # create the APP
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='')
 
 @app.route("/")
 def hello():
     now = datetime.datetime.now()
     timeString = now.strftime("%Y-%m-%d %H:%M")
     templateData = {
-      'title' : 'HELLO!',
+      'title' : 'EOS control panel',
       'time': timeString
     }
     return render_template('main.html', **templateData)
