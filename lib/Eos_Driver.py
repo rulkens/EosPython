@@ -2,7 +2,7 @@
 
 from Adafruit_PWM_Servo_Driver import PWM
 
-PWM_FREQ            = 300   # PWM frequency
+PWM_FREQ            = 500    # PWM frequency
 PWM_DRIVER_ADDR1    = 0x40  # address of the first driver
 PWM_DRIVER_ADDR2    = 0x41  # address of the second driver
 
@@ -42,6 +42,9 @@ class EOS_Driver:
         self.setFreq(freq)
         
         # reset the driver boards to turn all lights off
+        # TODO: probably don't do this, and let the user decide
+        # however, we won't have a status of the lights after the
+        # app closes
         if self.debug: print "Turning all lights off"
         self.allOff()
     

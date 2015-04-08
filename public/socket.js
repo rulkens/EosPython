@@ -3,7 +3,7 @@
  */
 $(document).ready(function(){
 
-    var eos = new Eos({ socket: false });
+    var eos = new Eos();
 
     $('#stepSlider').slider().on('click slide', function(e){
         eos.api('only', [e.value, 1]);

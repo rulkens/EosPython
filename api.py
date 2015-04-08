@@ -1,4 +1,7 @@
 from lib.Eos_Driver import EOS_Driver
+from noise import pnoise2
+import random, time, math
+import numpy as np
 
 # ===========================================================================
 # Simplified EOS api
@@ -49,6 +52,35 @@ def off(opts=None):
         eos.allOff()
         return "all lights turned off"
 
+def glow(opts):
+
+    def noise(x, y):
+        basenoise = pnoise2(x*0.003, y*0.2, octaves=2)+.3
+        basenoise *= 0.8
+        return math.pow(basenoise, 3)
+
+    # TODO: define active region
+    start = 2
+    end = 25
+
+    x = 0
+    while True:
+        vals = [ noise(x, y) for y in range(0,32)]
+        # determine what part should be illuminated
+        for i in range(0,start):
+            vals[i] = 0
+        for i in range(end, 32):
+            vals[i] = 0
+
+        eos.set(vals)
+#         print(eos.status)
+        print('total intensity: %.4f | average intensity %.4f' % (sum(vals), np.mean(vals)))
+        time.sleep(.03)
+        x = x + 1
+
+# def glow2(opts):
+
+
 def setFreq(opts):
     eos.setFreq(int(opts[0]))
     return "setting a new frequency to " % opts[0]
@@ -66,8 +98,11 @@ actions = {
     'only':         only,
     'on':           on,
     'off':          off,
+
+    'glow':         glow,
+
     'setfreq':      setFreq,
-    'status':       status
+    'status':       status,
 }
 
 def errorHandler():
