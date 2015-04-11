@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, argparse
-from api import EOS_API
+from lib.api.EOS_API import EOS_API
 
 # ===========================================================================
 # Command line utility for controlling the EOS lamp

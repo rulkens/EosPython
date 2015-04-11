@@ -6,8 +6,8 @@
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="//bootswatch.com/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css">
-    <link rel="stylesheet" href="/style/bootstrap-slider.css">
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="{{ static_url('style/bootstrap-slider.css')}}">
+    <link rel="stylesheet" href="{{ static_url('style/main.css')}}">
 </head>
 
 <body>
@@ -38,13 +38,13 @@
         <!-- intensity slider -->
         <div class="row row-section">
             <div class="col-xs-6">
-                    <input type="number"
-                           id="intensitySlider"
-                           data-slider-id="intensitySlider"
-                           data-slider-min="0"
-                           data-slider-max="1"
-                           data-slider-step="0.005"
-                           data-slider-value="0"/>
+                <input type="number"
+                       id="intensitySlider"
+                       data-slider-id="intensitySlider"
+                       data-slider-min="0"
+                       data-slider-max="1"
+                       data-slider-step="0.005"
+                       data-slider-value="0"/>
             </div>
             <div class="col-xs-6">
                 <label for="intensitySlider" class="slider-label">Intensity</label>
@@ -54,13 +54,13 @@
         <!-- step slider -->
         <div class="row row-section">
             <div class="col-xs-6">
-                    <input type="number"
-                           id="stepSlider"
-                           data-slider-id="stepSlider"
-                           data-slider-min="0"
-                           data-slider-max="31"
-                           data-slider-step="1"
-                           data-slider-value="0"/>
+                <input type="number"
+                       id="stepSlider"
+                       data-slider-id="stepSlider"
+                       data-slider-min="0"
+                       data-slider-max="31"
+                       data-slider-step="1"
+                       data-slider-value="0"/>
             </div>
             <div class="col-xs-6">
                 <label for="stepSlider" class="slider-label">Step</label>
@@ -151,7 +151,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h2>Individual controls</h2>
-            {% for item in range(0,32) %}
+                {% for item in range(0,32) %}
                 <div class="row row-slider">
                     <div class="col-sm-11 col-xs-10">
                         <input type="number"
@@ -171,7 +171,7 @@
                             data-label-id="lightLabel{{31-item}}"></span>
                     </div>
                 </div>
-            {% endfor %}
+                {% end %}
             </div>
         </div>
 
@@ -179,10 +179,11 @@
     </div>
 </main>
 
+<script src="http://cdn.jsdelivr.net/sockjs/0.3/sockjs.min.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
-<script src="/vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js"></script>
-<script src="/script/eos.js"></script>
-<script src="/script/main.js"></script>
+<script src="{{ static_url('vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js')}}"></script>
+<script src="{{ static_url('script/eos.js')}}"></script>
+<script src="{{ static_url('script/main.js')}}"></script>
 
 </body>
 </html>

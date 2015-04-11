@@ -5,26 +5,18 @@
 # ===========================================================================
 
 from flask import Flask, jsonify, render_template
-from flask.ext.socketio import SocketIO
-from api import EOS_API
+from lib.api.EOS_API import EOS_API
 import datetime, os
 
 SOCKET_NAMESPACE = '/api'
 # create the APP
 app = Flask(__name__, static_folder='public', static_url_path='')
 
-# socketapp = Flask(__name__ + 'socket')
-socketio = SocketIO(app)
-
 @app.route("/")
 def hello():
     now = datetime.datetime.now()
     timeString = now.strftime("%Y-%m-%d %H:%M")
-    templateData = {
-      'title' : 'EOS control panel',
-      'time': timeString
-    }
-    return render_template('main.html', **templateData)
+    return render_template('main.html')
     
 @app.route("/api/<action>", defaults={'args':''})
 @app.route("/api/<action>/<args>")
@@ -33,19 +25,7 @@ def api_handler(action, args=''):
         return jsonify({'error': 'specify an action'})
     else:
         # execute the action
-        return jsonify({'result': EOS_API(action, args.split(','))})
-
-# socket handling
-@socketio.on('connect', namespace=SOCKET_NAMESPACE)
-def test_connect():
-    print('client connected!')
-    emit('result', EOS_API('status'))
-
-@socketio.on('action', namespace=SOCKET_NAMESPACE)
-def socket_message_handler(m):
-    action = m.action
-    args = m.args
-    emit('result', {'result': EOS_API(action, args)})
+        return jsonify(EOS_API(action, args.split(',')))
 
 if __name__ == "__main__":
     socket_port = int(os.getenv('EOS_SOCKET_PORT', 5153))
