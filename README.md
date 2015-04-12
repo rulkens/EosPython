@@ -23,13 +23,13 @@ associated MOSFET. The connector is plugged into a circuit that pulls down the v
 with a 10kOhm resistor. This circuit is connected to two Adafruit PWM drivers that supply the PWM signals to all the 
 lights.
 
-The PWM drivers are connected to a (Raspberry Pi 2 Model B)[https://www.raspberrypi.org/products/raspberry-pi-2-model-b/] 
-on the (I2C bus)[http://en.wikipedia.org/wiki/I%C2%B2C], using (GPIO pins)[http://pi.gadgetoid.com/pinout] 
+The PWM drivers are connected to a [Raspberry Pi 2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/) 
+on the [I2C bus](http://en.wikipedia.org/wiki/I%C2%B2C), using [GPIO pins](http://pi.gadgetoid.com/pinout)
 2,3,5,7 and 9. Normally we would use pin 1 for 3.3v power, but since the MOSFETs don't switch with 3.3V we need to use
 5V. The Adafruit PWM drivers have no problem running on 5V power.
 
 To get the PWM drivers to work, I followed the excellent 
-(Adafruit I2C tutorial)[https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/overview]. You need to
+[Adafruit I2C tutorial](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/overview). You need to
 install a couple of packages before you can get started:
 
     sudo apt-get install python-dev
