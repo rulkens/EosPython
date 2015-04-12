@@ -1,9 +1,9 @@
 # EosPython
-Python, REST and websocket I2C Raspberry Pi interface with AdaFruit PWM Driver.
+Python, REST and websocket I2C Raspberry Pi interface with [AdaFruit PWM Driver](http://www.adafruit.com/products/815).
 
 ## Server
 EosPython comes with a simple webserver, both with an REST API and websocket interface. It includes an admin interface 
-that communicates with the server using SockJS.
+that communicates with the server using [SockJS](http://sockjs.org).
 
 To run the server on your Raspberry PI, you have to have the following pip packages installed:
 
@@ -108,7 +108,7 @@ or get a power supply with more juice (I use a 400W customized PC power supply).
 
 ### Create a light at the bottom
 The EOS API also has some higher-level functionality. One of those is to create a light spanning multiple lamps.
-It gives a very nice effect, especially when you move the light. Run the followign command
+It gives a very nice effect, especially when you move the light. Run the following command
 
     sudo ./eos light 0 4 1 'cube'
     
