@@ -13,15 +13,15 @@ class Glow():
 
     def start(self):
         logging.info('glowing starts!')
-#         self.x = 0
-#         self.timer = Timer(SLEEP_TIME, self.step)
-#         self.timer.start()
+        self.x = 0
+        self.timer = Timer(SLEEP_TIME, self.step)
+        self.timer.start()
 
     def stop(self):
         self.timer.cancel()
 
     def step(self):
-        vals = [ noise(x, y) for y in range(0,32)]
+        vals = [noise(x, y) for y in range(0,32)]
 #         logging.info('glowing %s' % vals)
         # determine what part should be illuminated
         for i in range(0,start):
