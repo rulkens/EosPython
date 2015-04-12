@@ -15,9 +15,10 @@ parser.add_argument('arguments', help='the arguments for the specific action', n
 args = parser.parse_args()
 
 # some debug output
-print "the action to take is %s" % args.action
-print "with arguments %s" % args.arguments
+print "EOS interface v1.0"
+print " * action:    %s" % args.action
+print " * arguments: %s" % args.arguments
 
 # execute the action
 # TODO: pass any optional arguments to the function
-print EOS_API(args.action, args.arguments)
+print " * result:    %s" % EOS_API(args.action, args.arguments)
