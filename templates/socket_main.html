@@ -11,173 +11,184 @@
 </head>
 
 <body>
-<header>
-    <nav>
+<div class="container">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12"><h1>EOS control panel</h1></div>
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">EOS : Play with that light!</a>
+                <span class="label label-success" id="statusLabel">connected</span>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/help/">Help</a>
+                    </li>
+                </ul>
+
             </div>
         </div>
-    </nav>
-</header>
-<main>
-    <div class="container">
+    </div>
+</div>
 
-        <!-- lights toggle -->
-        <div class="row row-section">
-            <div class="col-xs-6">
-                <input type="checkbox" data-toggle="toggle" data-size="large" id="lightsToggle">
-            </div>
-            <div class="col-xs-6">
-                <label for="lightsToggle">
-                    Toggle the lights on/off
-                </label>
-            </div>
+<div class="container main-container">
+
+    <!-- lights toggle -->
+    <div class="row row-section">
+        <div class="col-xs-6">
+            <input type="checkbox" data-toggle="toggle" data-size="large" id="lightsToggle">
         </div>
-
-        <!-- intensity slider -->
-        <div class="row row-section">
-            <div class="col-xs-6">
-                <input type="number"
-                       id="intensitySlider"
-                       data-slider-id="intensitySlider"
-                       data-slider-min="0"
-                       data-slider-max="1"
-                       data-slider-step="0.005"
-                       data-slider-value="0"/>
-            </div>
-            <div class="col-xs-6">
-                <label for="intensitySlider" class="slider-label">Intensity</label>
-            </div>
+        <div class="col-xs-6">
+            <label for="lightsToggle">
+                Toggle the lights on/off
+            </label>
         </div>
+    </div>
 
-        <!-- step slider -->
-        <div class="row row-section">
-            <div class="col-xs-6">
-                <input type="number"
-                       id="stepSlider"
-                       data-slider-id="stepSlider"
-                       data-slider-min="0"
-                       data-slider-max="31"
-                       data-slider-step="1"
-                       data-slider-value="0"/>
-            </div>
-            <div class="col-xs-6">
-                <label for="stepSlider" class="slider-label">Step</label>
-            </div>
+    <!-- intensity slider -->
+    <div class="row row-section">
+        <div class="col-xs-6">
+            <input type="number"
+                   id="intensitySlider"
+                   data-slider-id="intensitySlider"
+                   data-slider-min="0"
+                   data-slider-max="1"
+                   data-slider-step="0.005"
+                   data-slider-value="0"/>
         </div>
-
-        <!-- gamma slider -->
-        <div class="row row-section">
-            <div class="col-xs-6">
-                <input type="number"
-                       id="gammaSlider"
-                       data-slider-id="gammaSlider"
-                       data-slider-min="0"
-                       data-slider-max="4"
-                       data-slider-step="0.01"
-                       data-slider-value="1"/>
-            </div>
-            <div class="col-xs-6">
-                <label for="stepSlider" class="slider-label">Gamma</label>
-            </div>
+        <div class="col-xs-6">
+            <label for="intensitySlider" class="slider-label">Intensity</label>
         </div>
+    </div>
 
-        <!-- programs -->
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Programs</h2>
-                <h3>Light</h3>
-                <div class="row row-section">
-                    <div class="col-xs-6">
-                        <input type="number"
-                               id="lightPosSlider"
-                               data-slider-id="lightPosSlider"
-                               data-slider-min="0"
-                               data-slider-max="1"
-                               data-slider-step="0.005"
-                               data-slider-value="0"/>
-                    </div>
-                    <div class="col-xs-6">
-                        <label for="lightPosSlider" class="slider-label">Position</label>
-                    </div>
+    <!-- step slider -->
+    <div class="row row-section">
+        <div class="col-xs-6">
+            <input type="number"
+                   id="stepSlider"
+                   data-slider-id="stepSlider"
+                   data-slider-min="0"
+                   data-slider-max="31"
+                   data-slider-step="1"
+                   data-slider-value="0"/>
+        </div>
+        <div class="col-xs-6">
+            <label for="stepSlider" class="slider-label">Step</label>
+        </div>
+    </div>
+
+    <!-- gamma slider -->
+    <div class="row row-section">
+        <div class="col-xs-6">
+            <input type="number"
+                   id="gammaSlider"
+                   data-slider-id="gammaSlider"
+                   data-slider-min="0"
+                   data-slider-max="4"
+                   data-slider-step="0.01"
+                   data-slider-value="1"/>
+        </div>
+        <div class="col-xs-6">
+            <label for="stepSlider" class="slider-label">Gamma</label>
+        </div>
+    </div>
+
+    <!-- programs -->
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Programs</h2>
+            <h3>Light</h3>
+            <div class="row row-section">
+                <div class="col-xs-6">
+                    <input type="number"
+                           id="lightPosSlider"
+                           data-slider-id="lightPosSlider"
+                           data-slider-min="0"
+                           data-slider-max="1"
+                           data-slider-step="0.005"
+                           data-slider-value="0"/>
                 </div>
-
-                <div class="row row-section">
-                    <div class="col-xs-6">
-                        <input type="number"
-                               id="lightSizeSlider"
-                               data-slider-id="lightSizeSlider"
-                               data-slider-min="0"
-                               data-slider-max="8"
-                               data-slider-step="0.1"
-                               data-slider-value="3"/>
-                    </div>
-                    <div class="col-xs-6">
-                        <label for="lightSizeSlider" class="slider-label">Size</label>
-                    </div>
-                </div>
-
-                <div class="row row-section">
-                    <div class="col-xs-6">
-                        <input type="number"
-                               id="lightIntensitySlider"
-                               data-slider-id="lightIntensitySlider"
-                               data-slider-min="0"
-                               data-slider-max="2"
-                               data-slider-step="0.02"
-                               data-slider-value="1"/>
-                    </div>
-                    <div class="col-xs-6">
-                        <label for="lightIntensitySlider" class="slider-label">Intensity</label>
-                    </div>
-                </div>
-
-                <h3>Glow</h3>
-                <div class="row row-section">
-                    <div class="col-xs-6">
-                        <input type="checkbox" data-toggle="toggle" data-size="large" id="glowToggle">
-                    </div>
-                    <div class="col-xs-6">
-                        <label for="glowToggle">
-                            Toggle Glow functionality
-                        </label>
-                    </div>
+                <div class="col-xs-6">
+                    <label for="lightPosSlider" class="slider-label">Position</label>
                 </div>
             </div>
-        </div>
 
-        <!-- individual controls -->
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Individual controls</h2>
-                {% for item in range(0,32) %}
-                <div class="row row-slider">
-                    <div class="col-sm-11 col-xs-10">
-                        <input type="number"
-                               data-light="{{31-item}}"
-                               data-slider
-                               data-slider-id="lightSlider{{31-item}}"
-                               data-slider-min="0"
-                               data-slider-max="1"
-                               data-slider-step="0.001"
-                               data-slider-value="0"
-                               data-slider-tooltip="hide"/>
-                    </div>
-                    <div class="col-sm-1 col-xs-2">
+            <div class="row row-section">
+                <div class="col-xs-6">
+                    <input type="number"
+                           id="lightSizeSlider"
+                           data-slider-id="lightSizeSlider"
+                           data-slider-min="0"
+                           data-slider-max="8"
+                           data-slider-step="0.1"
+                           data-slider-value="3"/>
+                </div>
+                <div class="col-xs-6">
+                    <label for="lightSizeSlider" class="slider-label">Size</label>
+                </div>
+            </div>
+
+            <div class="row row-section">
+                <div class="col-xs-6">
+                    <input type="number"
+                           id="lightIntensitySlider"
+                           data-slider-id="lightIntensitySlider"
+                           data-slider-min="0"
+                           data-slider-max="2"
+                           data-slider-step="0.02"
+                           data-slider-value="1"/>
+                </div>
+                <div class="col-xs-6">
+                    <label for="lightIntensitySlider" class="slider-label">Intensity</label>
+                </div>
+            </div>
+
+            <h3>Glow</h3>
+            <div class="row row-section">
+                <div class="col-xs-6">
+                    <input type="checkbox" data-toggle="toggle" data-size="large" id="glowToggle">
+                </div>
+                <div class="col-xs-6">
+                    <label for="glowToggle">
+                        Toggle Glow functionality
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- individual controls -->
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Individual controls</h2>
+            {% for item in range(0,32) %}
+            <div class="row row-slider">
+                <div class="col-sm-11 col-xs-10">
+                    <input type="number"
+                           data-light="{{31-item}}"
+                           data-slider
+                           data-slider-id="lightSlider{{31-item}}"
+                           data-slider-min="0"
+                           data-slider-max="1"
+                           data-slider-step="0.001"
+                           data-slider-value="0"
+                           data-slider-tooltip="hide"/>
+                </div>
+                <div class="col-sm-1 col-xs-2">
                     <span
                             data-light="{{31-item}}"
                             data-label
                             data-label-id="lightLabel{{31-item}}"></span>
-                    </div>
                 </div>
-                {% end %}
             </div>
+            {% end %}
         </div>
-
-
     </div>
-</main>
+</div>
 
 <script src="http://cdn.jsdelivr.net/sockjs/0.3/sockjs.min.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>

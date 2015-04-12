@@ -30,7 +30,7 @@
 }
 .slider.slider-horizontal {
   width: 100%;
-  min-width: 200px;
+  min-width: 100px;
   height: 30px;
 }
 .slider.slider-horizontal .slider-track {
