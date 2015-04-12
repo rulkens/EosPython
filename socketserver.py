@@ -14,16 +14,17 @@ import json
 from lib.api.EOS_API import EOS_API
 
 class Application(tornado.web.Application):
+    """main application"""
     def __init__(self):
         EosRouter = sockjs.tornado.SockJSRouter(EosConnection, '/api')
         handlers = [(r"/", IndexHandler)] + EosRouter.urls
         settings = dict(
-            cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
+            cookie_secret="_-:RR8.!|9v=2N_e0!.9^+.+;~7!*k^~4U~.1F=*9N!1~^q0!~:-k2.!^xJ..a",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "public"),
             xsrf_cookies=True,
+            debug=True
         )
-        logging.info(settings)
         tornado.web.Application.__init__(self, handlers, **settings)
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -53,10 +54,8 @@ class EosConnection(sockjs.tornado.SockJSConnection):
         # print the message
         logging.info('message %s' % m)
         ret = EOS_API(m['action'], m['arguments'])
-#         ret = { 'result': []}
         # Broadcast message
         self.broadcast(self.participants, ret)
-
 
     def on_close(self):
         # Remove client from the clients list and broadcast leave message
@@ -72,12 +71,7 @@ if __name__ == "__main__":
 
     socket_port = int(os.getenv('EOS_SOCKET_PORT', 5153))
 
-    logging.info('logging on port %s' % socket_port)
-    logging.info('path to static files: %s' % os.path.join(os.path.dirname(__file__), "public"))
-#     logging.info('path to static files: %s' % settings.static_path)
-
-
-
+    logging.info('listening on port %s' % socket_port)
     # 3. Make Tornado app listen on port 8080
     app.listen(socket_port)
 
