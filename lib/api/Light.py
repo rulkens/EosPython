@@ -1,10 +1,15 @@
 import numpy as np
 import math
 
+# ===========================================================================
+# Light class
+# provides an abstract light that can be positioned in some place on the lamp
+# with some nice effects
+# ===========================================================================
+
 # generic light class
 class Light:
-    def __init__(self, driver, position = 0.0, size = 1.0, intensity = 1.0, falloff_curve='linear', num_lights=32):
-        self.driver = driver
+    def __init__(self, position = 0.0, size = 1.0, intensity = 1.0, falloff_curve='linear', num_lights=32):
         self.position = position
         self.size = size
         self.intensity = intensity
@@ -20,7 +25,7 @@ class Light:
 
     def result(self):
         # calculate all the intensities
-        values = [ float(i)/(self.driver.NUM_LIGHTS-1) for i in range(0, self.driver.NUM_LIGHTS)]
+        values = [ float(i)/(self.num_lights-1) for i in range(0, self.num_lights)]
         # apply the falloff curve
         values = map(lambda i: self._intensity_at(i), values)
         values = np.clip(values, 0, 1)

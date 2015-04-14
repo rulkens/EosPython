@@ -14,11 +14,24 @@ parser.add_argument('arguments', help='the arguments for the specific action', n
 
 args = parser.parse_args()
 
+# utility functions
+def hilite(string, status=True, bold=False):
+    attr = []
+    if status:
+        # green
+        attr.append('32')
+    else:
+        # red
+        attr.append('31')
+    if bold:
+        attr.append('1')
+    return '\x1b[%sm%s\x1b[0m' % (';'.join(attr), string)
+
 # some debug output
 print "EOS interface v1.0"
-print " * action:    %s" % args.action
-print " * arguments: %s" % args.arguments
+print hilite(" * action:    %s" % args.action)
+print hilite(" * arguments: %s" % args.arguments)
 
 # execute the action
 # TODO: pass any optional arguments to the function
-print " * result:    %s" % EOS_API(args.action, args.arguments)
+print hilite(" * result:    %s" % EOS_API(args.action, args.arguments))

@@ -1,3 +1,17 @@
+.navbar {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+.navbar-logo {
+  margin-top: 10px;
+  margin-left: -7px;
+  margin-right: 10px;
+}
+.navbar-brand .label {
+  margin-top: 2px;
+  margin-left: 10px;
+  position: relative;
+  top: -2px;
+}
 .slider-label {
   width: 100%;
 }
@@ -10,4 +24,4 @@
 .main-container {
   margin-top: 80px;
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4ubGVzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFdBQUE7O0FBR0Y7RUFDRSxrQkFBQTs7QUFHRjtFQUNFLG1CQUFBOztBQUdGO0VBQ0UsZ0JBQUEiLCJmaWxlIjoidW5kZWZpbmVkIn0= */
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4ubGVzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHdDQUFBOztBQUVGO0VBQ0UsZ0JBQUE7RUFDQSxpQkFBQTtFQUNBLGtCQUFBOztBQUdGLGFBQWM7RUFDWixlQUFBO0VBQ0EsaUJBQUE7RUFDQSxrQkFBQTtFQUNBLFNBQUE7O0FBR0Y7RUFDRSxXQUFBOztBQUdGO0VBQ0Usa0JBQUE7O0FBR0Y7RUFDRSxtQkFBQTs7QUFHRjtFQUNFLGdCQUFBIiwiZmlsZSI6InVuZGVmaW5lZCJ9 */

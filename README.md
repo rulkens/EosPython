@@ -5,7 +5,7 @@ Python, REST and websocket I2C Raspberry Pi interface with [AdaFruit PWM Driver]
 EosPython comes with a simple webserver, both with an REST API and websocket interface. It includes an admin interface 
 that communicates with the server using [SockJS](http://sockjs.org).
 
-To run the server on your Raspberry PI, you have to have the following pip packages installed:
+You have to have the following pip packages installed:
 
     tornado
     sockjs-tornado
@@ -16,6 +16,12 @@ to install the dependencies into `public/vendor`
 The server port defaults to `5153` and can be configured using the following environment variable:
 
     EOS_SOCKET_PORT=5153
+    
+To run the server on your Raspberry PI, navigate to the main directory and
+
+    sudo python socketserver.py
+
+You can then navigate to the web interface on the pre-defined port or write your own websocket interface!
 
 ## Eos Hardware
 The EOS lamp contains 32 10W, 12V halogen lights. All of them can be switched by applying a 5V voltage to their 

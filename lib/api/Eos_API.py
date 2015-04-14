@@ -70,6 +70,19 @@ def off(opts=None):
         eos.allOff()
         return "all lights turned off"
 
+def setFreq(opts):
+    eos.setFreq(int(opts[0]))
+    return "setting a new frequency to " % opts[0]
+
+def status(opts):
+    return eos.getStatus()
+
+def gamma(opts):
+    return eos.setGamma(float(opts[0]))
+
+## HIGHER-LEVEL functionality
+
+## TODO: move to a separate file
 glower = Glow(eos)
 def glow(opts):
     print glow.driver
@@ -79,14 +92,14 @@ def glow(opts):
         glower.start()
 
 
+## TODO: move to a separate file
 # def glow2(opts):
 def pong(opts):
 
     size = 3.0/NUM_LIGHTS # light size
-    speed = 7.0 # in lights/sec
+    speed = 2.0 # in lights/sec
 
-
-    light = Light(eos, size=size, falloff_curve='quad', intensity=1)
+    light = Light(size=size, falloff_curve='linear', intensity=0.2)
 
     print('position %s' % light.position)
 
@@ -106,20 +119,10 @@ def pong(opts):
 
 def light(opts):
     size = float(opts[1])/NUM_LIGHTS # light size
-    light = Light(eos, size=size, intensity=float(opts[2]), falloff_curve=opts[3])
+    light = Light(size=size, intensity=float(opts[2]), falloff_curve=opts[3])
     light.position = float(opts[0])
     # set the actual light
-    eos.set(light.result())
-
-def setFreq(opts):
-    eos.setFreq(int(opts[0]))
-    return "setting a new frequency to " % opts[0]
-
-def status(opts):
-    return eos.getStatus()
-
-def gamma(opts):
-    return eos.setGamma(float(opts[0]))
+    return eos.set(light.result())
 
 # overview of all the actions possible
 actions = {
@@ -146,6 +149,5 @@ def errorHandler(error):
 
 # export function
 def EOS_API(action, args=None):
-    print action
     return {'result': actions.get(action, errorHandler)(args), 'status': eos.getStatus() }
 

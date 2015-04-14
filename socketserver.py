@@ -17,7 +17,9 @@ class Application(tornado.web.Application):
     """main application"""
     def __init__(self):
         EosRouter = sockjs.tornado.SockJSRouter(EosConnection, '/api')
-        handlers = [(r"/", IndexHandler)] + EosRouter.urls
+
+        handlers = [(r"/", IndexHandler), (r"/help/", HelpHandler)] + EosRouter.urls
+
         settings = dict(
             cookie_secret="_-:RR8.!|9v=2N_e0!.9^+.+;~7!*k^~4U~.1F=*9N!1~^q0!~:-k2.!^xJ..a",
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -32,6 +34,10 @@ class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('socket_main.html')
 
+class HelpHandler(tornado.web.RequestHandler):
+    """Regular HTTP handler to serve the main page"""
+    def get(self):
+        self.render('help.html')
 
 class EosConnection(sockjs.tornado.SockJSConnection):
     """Chat connection implementation"""
@@ -40,7 +46,9 @@ class EosConnection(sockjs.tornado.SockJSConnection):
 
     def on_open(self, info):
         # Send that someone joined
-        self.broadcast(self.participants, "Someone joined.")
+        ret = EOS_API('status')
+        ret['result'] = 'Someone joined'
+        self.broadcast(self.participants, ret)
 
         # Add client to the clients list
         self.participants.add(self)
@@ -61,7 +69,9 @@ class EosConnection(sockjs.tornado.SockJSConnection):
         # Remove client from the clients list and broadcast leave message
         self.participants.remove(self)
 
-        self.broadcast(self.participants, "Someone left.")
+        ret = EOS_API('status')
+        ret['result'] = 'Someone left'
+        self.broadcast(self.participants, ret)
 
 if __name__ == "__main__":
     import logging

@@ -3,7 +3,15 @@
  */
 $(document).ready(function(){
 
-    var eos = new Eos({ socket: true });
+    var eos = new Eos(
+        { socket: true,
+            onclose: function(){
+                $('#statusLabel').removeClass('label-success').addClass('label-danger').text('disconnected');
+            },
+            onopen: function(){
+                $('#statusLabel').removeClass('label-danger').addClass('label-success').text('connected');
+            }
+        });
 
     // generic eos api handler
     var mapValuesOnProperty = function(values, prop){
@@ -17,6 +25,7 @@ $(document).ready(function(){
             //console.log(data);
             showFeedback(data.status);
         },
+        preventChange = false;
         showFeedback = function(values){
             // update all labels
             $('[data-label]').each(mapValuesOnProperty(values, 'text'));
@@ -28,7 +37,27 @@ $(document).ready(function(){
                 if(curval != newval){
                     $(this).slider('setValue', values[index]);
                 }
-            })
+            });
+
+            // on/off toggle
+            var toggleEl = $('#lightsToggle');
+            var sum = values.reduce(function(val, item){
+                return val + item;
+            });
+            if(sum > 0){
+                 // stupid hack for the bootstrap toggle that always wants to
+                if(!toggleEl.prop('checked')){
+                    preventChange = true;
+                    toggleEl.bootstrapToggle('on');
+                }
+            } else {
+                if(toggleEl.prop('checked')){
+                    preventChange = true;
+                    toggleEl.bootstrapToggle('off');
+                }
+            }
+
+            //
         },
         defaultApi = function(action, args){
             return eos.api(action, args, apiHandler);
@@ -42,7 +71,10 @@ $(document).ready(function(){
 
     $('#lightsToggle').change(function(item){
         var action = $(this).prop('checked') ? 'allon' : 'alloff';
-        defaultApi( action );
+        if(!preventChange){
+            defaultApi( action );
+        }
+        preventChange = false;
     });
 
     $('#stepSlider').slider().on('change', function(e){
@@ -72,8 +104,8 @@ $(document).ready(function(){
 
     var light = {
             pos: 0,
-            size: 3,
-            intensity: 1,
+            size: 2.5,
+            intensity: 0.5,
             falloff: 'quad'
         },
         lightArray = function(){

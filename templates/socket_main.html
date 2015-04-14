@@ -2,26 +2,42 @@
 <html>
 <head>
     <title>EOS control panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
     <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="//bootswatch.com/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css">
     <link rel="stylesheet" href="{{ static_url('style/bootstrap-slider.css')}}">
     <link rel="stylesheet" href="{{ static_url('style/main.css')}}">
+
+    <link rel="icon" type="image/png" href="{{ static_url('app-icon196.png')}}">
+    <!-- settings for web app -->
+    <link rel="shortcut icon" sizes="196x196" href="{{ static_url('app-icon196.png')}}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
 </head>
 
 <body>
 <div class="container">
     <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
+            <a class="pull-left navbar-logo" href="">
+                <img src="{{ static_url('app-icon196.png')}}" alt="EOS" width="42" height="42"/>
+            </a>
             <div class="navbar-header">
-                <a href="/" class="navbar-brand">EOS : Play with that light!</a>
-                <span class="label label-success" id="statusLabel">connected</span>
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <a href="/" class="navbar-brand">
+
+                    EOS
+                    <span class="label label-danger" id="statusLabel">disconnected</span>
+                </a>
+
+                <!--<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                <!--</button>-->
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav navbar-right">
@@ -51,7 +67,7 @@
 
     <!-- intensity slider -->
     <div class="row row-section">
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <input type="number"
                    id="intensitySlider"
                    data-slider-id="intensitySlider"
@@ -60,14 +76,14 @@
                    data-slider-step="0.005"
                    data-slider-value="0"/>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <label for="intensitySlider" class="slider-label">Intensity</label>
         </div>
     </div>
 
     <!-- step slider -->
     <div class="row row-section">
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <input type="number"
                    id="stepSlider"
                    data-slider-id="stepSlider"
@@ -76,14 +92,14 @@
                    data-slider-step="1"
                    data-slider-value="0"/>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <label for="stepSlider" class="slider-label">Step</label>
         </div>
     </div>
 
     <!-- gamma slider -->
     <div class="row row-section">
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <input type="number"
                    id="gammaSlider"
                    data-slider-id="gammaSlider"
@@ -92,7 +108,7 @@
                    data-slider-step="0.01"
                    data-slider-value="1"/>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-12 col-sm-6">
             <label for="stepSlider" class="slider-label">Gamma</label>
         </div>
     </div>
@@ -100,10 +116,9 @@
     <!-- programs -->
     <div class="row">
         <div class="col-xs-12">
-            <h2>Programs</h2>
-            <h3>Light</h3>
+            <h2>Light</h2>
             <div class="row row-section">
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <input type="number"
                            id="lightPosSlider"
                            data-slider-id="lightPosSlider"
@@ -112,13 +127,13 @@
                            data-slider-step="0.005"
                            data-slider-value="0"/>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <label for="lightPosSlider" class="slider-label">Position</label>
                 </div>
             </div>
 
             <div class="row row-section">
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <input type="number"
                            id="lightSizeSlider"
                            data-slider-id="lightSizeSlider"
@@ -127,13 +142,13 @@
                            data-slider-step="0.1"
                            data-slider-value="3"/>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <label for="lightSizeSlider" class="slider-label">Size</label>
                 </div>
             </div>
 
             <div class="row row-section">
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <input type="number"
                            id="lightIntensitySlider"
                            data-slider-id="lightIntensitySlider"
@@ -142,12 +157,12 @@
                            data-slider-step="0.02"
                            data-slider-value="1"/>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-12 col-sm-6">
                     <label for="lightIntensitySlider" class="slider-label">Intensity</label>
                 </div>
             </div>
 
-            <h3>Glow</h3>
+            <h2>Glow</h2>
             <div class="row row-section">
                 <div class="col-xs-6">
                     <input type="checkbox" data-toggle="toggle" data-size="large" id="glowToggle">
@@ -190,6 +205,7 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.6.0/lodash.min.js"></script>
 <script src="http://cdn.jsdelivr.net/sockjs/0.3/sockjs.min.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
 <script src="{{ static_url('vendor/seiyria-bootstrap-slider/js/bootstrap-slider.js')}}"></script>
