@@ -55,6 +55,9 @@ The PWM drivers use the bus numbers `0x40` and `0x41`. You can check if the driv
 
     sudo i2cdetect -y 1
     
+or
+    sudo ./testi2c.sh
+    
 You should see something like this:
 
          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
