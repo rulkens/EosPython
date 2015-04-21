@@ -25,7 +25,7 @@ $(document).ready(function(){
             //console.log(data);
             showFeedback(data.status);
         },
-        preventChange = false;
+        preventChange = false,
         showFeedback = function(values){
             // update all labels
             $('[data-label]').each(mapValuesOnProperty(values, 'text'));
@@ -57,7 +57,8 @@ $(document).ready(function(){
                 }
             }
 
-            //
+            // light indicators
+            $('.light-indicator').style('background', 'background: -webkit-linear-gradient(left, #1e5799 0%,#2989d8 50%,#207cca 81%,#7db9e8 100%)');
         },
         defaultApi = function(action, args){
             return eos.api(action, args, apiHandler);
@@ -133,4 +134,15 @@ $(document).ready(function(){
         defaultApi('glow', arguments );
     });
 
+    // PONG
+    $('#pongToggle').change(function(item){
+        var arguments = [$(this).prop('checked') ? 'on' : 'off'];
+        defaultApi('pong', arguments );
+    });
+
+    // CLOCK
+    $('#clockToggle').change(function(item){
+        var arguments = [$(this).prop('checked') ? 'on' : 'off'];
+        defaultApi('clock', arguments );
+    });
 });
