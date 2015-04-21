@@ -1,8 +1,10 @@
 from lib.driver.EOS_Driver import EOS_Driver
 from Light import Light
 from lib.actions.Glow import Glow
+from lib.actions.Pong import Pong
+from lib.actions.BinaryClock import BinaryClock
 
-from noise import pnoise2
+import threading
 import random, time, math
 import numpy as np
 
@@ -84,38 +86,33 @@ def gamma(opts):
 
 ## TODO: move to a separate file
 glower = Glow(eos)
+glower.start() # start the glower thread (should probably only do this when it's actually needed...)
 def glow(opts):
-    print glow.driver
-    if opts[0] is 'off':
-        glower.stop()
-    else:
-        glower.start()
-
+    if opts[0] == 'off':
+        glower.pause()
+        allOff([])
+    if opts[0] == 'on':
+        glower.resume()
 
 ## TODO: move to a separate file
-# def glow2(opts):
+ponger = Pong(eos)
+ponger.start()
 def pong(opts):
+    if opts[0] == 'off':
+        ponger.pause()
+        allOff([])
+    if opts[0] == 'on':
+        ponger.resume()
 
-    size = 3.0/NUM_LIGHTS # light size
-    speed = 2.0 # in lights/sec
-
-    light = Light(size=size, falloff_curve='linear', intensity=0.2)
-
-    print('position %s' % light.position)
-
-    direction = 1
-
-    # move the light up and down the tube
-    while True:
-        light.position += direction*(speed/LIGHTS_SEC)
-
-        eos.set(light.result())
-
-        time.sleep(SLEEP_TIME)
-        if light.position > 1:
-            direction = -1
-        if light.position < 0:
-            direction = 1
+## TODO: move to a separate file
+clocker = BinaryClock(eos)
+clocker.start()
+def clock(opts):
+    if opts[0] == 'off':
+        clocker.pause()
+        allOff([])
+    if opts[0] == 'on':
+        clocker.resume()
 
 def light(opts):
     size = float(opts[1])/NUM_LIGHTS # light size
@@ -123,6 +120,7 @@ def light(opts):
     light.position = float(opts[0])
     # set the actual light
     return eos.set(light.result())
+
 
 # overview of all the actions possible
 actions = {
@@ -135,9 +133,12 @@ actions = {
     'on':           on,
     'off':          off,
 
+    'light':        light,
+
+    # time-actions
     'glow':         glow,
     'pong':         pong,
-    'light':        light,
+    'clock':        clock,
 
     'setfreq':      setFreq,
     'status':       status,
@@ -150,4 +151,3 @@ def errorHandler(error):
 # export function
 def EOS_API(action, args=None):
     return {'result': actions.get(action, errorHandler)(args), 'status': eos.getStatus() }
-

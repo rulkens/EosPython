@@ -44,6 +44,7 @@ class EosConnection(sockjs.tornado.SockJSConnection):
     # Class level variable
     participants = set()
 
+
     def on_open(self, info):
         # Send that someone joined
         ret = EOS_API('status')
