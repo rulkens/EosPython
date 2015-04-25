@@ -1,12 +1,15 @@
+import threading
+import random
+import time
+import math
+import numpy as np
+
 from lib.driver.EOS_Driver import EOS_Driver
-from Light import Light
 from lib.actions.Glow import Glow
 from lib.actions.Pong import Pong
 from lib.actions.BinaryClock import BinaryClock
 
-import threading
-import random, time, math
-import numpy as np
+from Light import Light
 
 # ===========================================================================
 # Higher level EOS api
