@@ -44,7 +44,6 @@ class EosConnection(sockjs.tornado.SockJSConnection):
     # Class level variable
     participants = set()
 
-
     def on_open(self, info):
         # Send that someone joined
         ret = EOS_API('status')
@@ -58,7 +57,7 @@ class EosConnection(sockjs.tornado.SockJSConnection):
 
         m = dict(json.loads(message))
 
-        # see if it's an action message
+        # TODO: see if it's an action message
         # if so, parse the action and call the EOS_API
         # print the message
         logging.info('message %s' % m)
