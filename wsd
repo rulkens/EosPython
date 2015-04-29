@@ -1,0 +1,5 @@
+#!/usr/bin/python
+
+from eos.server.ws import main
+# run server
+main()

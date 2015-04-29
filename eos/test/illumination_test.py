@@ -1,4 +1,4 @@
-from lib.api.EOS_API import EOS_API
+from eos.api.EOS_API import EOS_API
 import socket
 import sys
 import time

@@ -5,7 +5,7 @@ import time
 import logging
 
 from Action import Action
-from lib.api.Light import Light
+from eos.api.Light import Light
 from noise import pnoise2
 
 # ===========================================================================

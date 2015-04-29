@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from lib.Eos_Driver import EOS_Driver
+from eos.driver.EOS_Driver import EOS_Driver
 import time
 import atexit
 
@@ -78,11 +78,12 @@ def blinkTest():
 def setSomeRandomValues():
     eos.set([0,0,0,1,0,0,.5,.3,.2,.1,0,0,0,1,0,1,0])
 
-# main program
-progressiveIntensity()
-progressiveIntensityOne(1)
-sweep()
-blinkTest()
-setSomeRandomValues()
-time.sleep(10)
-interactiveAll()
+if __name__ == "__main__":
+    # main program
+    progressiveIntensity()
+    progressiveIntensityOne(1)
+    sweep()
+    blinkTest()
+    setSomeRandomValues()
+    time.sleep(10)
+    interactiveAll()

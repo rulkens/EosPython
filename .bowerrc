@@ -1,5 +1,5 @@
 {
-  "directory": "public/vendor/",
+  "directory": "eos/server/public/vendor/",
   "analytics": false,
   "timeout": 120000
 }

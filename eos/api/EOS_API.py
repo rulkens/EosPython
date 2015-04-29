@@ -4,10 +4,10 @@ import time
 import math
 import numpy as np
 
-from lib.driver.EOS_Driver import EOS_Driver
-from lib.actions.Glow import Glow
-from lib.actions.Pong import Pong
-from lib.actions.BinaryClock import BinaryClock
+from eos.driver.EOS_Driver import EOS_Driver
+from eos.actions.Glow import Glow
+from eos.actions.Pong import Pong
+from eos.actions.BinaryClock import BinaryClock
 
 from Light import Light
 

@@ -11,7 +11,7 @@ import os
 import logging
 import json
 
-from lib.api.EOS_API import EOS_API
+from eos.api.EOS_API import EOS_API
 
 class Application(tornado.web.Application):
     """main application"""
@@ -73,7 +73,8 @@ class EosConnection(sockjs.tornado.SockJSConnection):
         ret['result'] = 'Someone left'
         self.broadcast(self.participants, ret)
 
-if __name__ == "__main__":
+def main():
+    """main application entry point"""
     import logging
     logging.getLogger().setLevel(logging.DEBUG)
 
@@ -87,3 +88,6 @@ if __name__ == "__main__":
 
     # 4. Start IOLoop
     tornado.ioloop.IOLoop.instance().start()
+
+if __name__ == "__main__":
+    main()
