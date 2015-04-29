@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # ===========================================================================
-# default server for communicating with the EOS from outside
+# default websocket server for communicating with the EOS from outside
 # ===========================================================================
 import tornado.ioloop
 import tornado.web
