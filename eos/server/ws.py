@@ -35,7 +35,7 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render('socket_main.html')
 
 class HelpHandler(tornado.web.RequestHandler):
-    """Regular HTTP handler to serve the main page"""
+    """Regular HTTP handler to serve the help page"""
     def get(self):
         self.render('help.html')
 
