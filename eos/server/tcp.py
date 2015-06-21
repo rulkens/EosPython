@@ -1,38 +1,56 @@
 #!/usr/bin/python
 
 # ===========================================================================
-# default TCP server for communicating with the EOS from outside
+# default TCP socket server for communicating with the EOS from outside
+# call this file directly or import main()
 # ===========================================================================
 
-import socket
 import os
 import logging
 import json
+import signal
+import time
 
 from eos.api.EOS_API import EOS_API
 
-BUFFER_SIZE = 1024
+from tornado.ioloop import IOLoop
+from tornado.tcpserver import TCPServer
+
+# from tornaduv import UVLoop
+# IOLoop.configure(UVLoop)
+
 ERROR_API = {'error': 'API called with incorrect number of arguments'}
 
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def handle_signal(sig, frame):
+    IOLoop.instance().add_callback(IOLoop.instance().stop)
+
+class EchoServer(TCPServer):
+
+    def handle_stream(self, stream, address):
+        self._stream = stream
+        self._read_line()
+
+    def _read_line(self):
+        try:
+            self._stream.read_until('\n', self._handle_read)
+        except Exception, e:
+            print "Error while reading stream : %s" % e
+
+    def _handle_read(self, data):
+        try:
+            data = json.loads(data)
+            self._stream.write(json.dumps(act_on(data)))
+        except Exception, e:
+            print "Error in reading json data", e
+        self._read_line()
 
 def act_on(data):
     """execute actions based on the data and return the status of the lamp after the action"""
-
-    logging.info("data received: %s" % data)
-
-    # data should be encoded as json string
-    try:
-        m = dict(json.loads(data))
-    except ValueError:
-        return json.dumps({'error': 'no valid json'})
-
     # pipe straight to the API interface and return the result
     try:
-        ret = json.dumps(EOS_API(m['action'], m['arguments']))
-        return ret
+        return EOS_API(data['action'], data['arguments'])
     except:
-        return json.dumps(ERROR_API)
+        return ERROR_API
 
 def main():
     """main application entry point"""
@@ -42,17 +60,12 @@ def main():
 
     logging.info('listening on port %s' % socket_port)
 
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    # start TCP listening
-    server.bind(('0',socket_port))
-    server.listen(4) # max four connections
-
-    # listen loop
-    while True:
-        client, address = server.accept()
-        data = client.recv(BUFFER_SIZE)
-        if data:
-            client.send(act_on(data))
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+    server = EchoServer()
+    server.listen(socket_port)
+    IOLoop.instance().start()
+    IOLoop.instance().close()
 
 if __name__ == "__main__":
     main()
