@@ -35,7 +35,6 @@ class Pong(Action):
 
     def run(self):
         logging.info('Glow initialized - and ready to go!')
-        self.x = 0.0
         while True:
             with self.state:
                 if self.paused:

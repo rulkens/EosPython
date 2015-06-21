@@ -43,6 +43,6 @@ class Light:
     def _intensity_at(self, pos):
         """get the intensity of the light at a certain position"""
         distance = abs(pos - self.position)
-        intensity = self.falloff_curves[self.falloff_curve](distance, self.size)
+        intensity = self.falloff_curves[self.falloff_curve](distance, self.size/2.0)
         return intensity * self.intensity
 
