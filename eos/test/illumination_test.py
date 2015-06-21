@@ -68,13 +68,15 @@ def test1():
         out.writerow(data_item)
 
 def test2():
+    """walk through all the lights one by one, vary the intensity in steps from 0-1"""
     test_nr = 2
     range_start = 0.2
-    range_end = 0.8
-    range_step = 0.01
-    file_add = '%s-%s' % (range_start, range_end)
+    range_end = 0.6
+    range_step = 0.005
+    falloff_curve = 'quad'
+    file_add = '%s-%s-%s' % (range_start, range_end, falloff_curve)
     file_date = datetime.datetime.now().strftime("%Y%m%d_%H.%M")
-    file_name = "test/data/illu-%s-%s-%s.csv" % (test_nr, file_date, file_add)
+    file_name = "test/data/illu-sweep-%s-%s-%s.csv" % (test_nr, file_date, file_add)
     # CSV file to save to
     out = csv.writer(open(file_name,"w"), delimiter=',',quoting=csv.QUOTE_MINIMAL)
 
@@ -82,14 +84,20 @@ def test2():
     print "Running EOS light test from light %s to %s" % (range_start, range_end)
     print "Saving to filename %s" % file_name
 
-    data_item = []
-    for light_pos in drange(range_start,range_end, range_step):
-        print 'writing row %s' % light_pos
-        EOS_API('light', [light_pos, 1.5, 1.0, 'linear'])
-        time.sleep(1)
-        ill = ask_illuminance()
-        data_item.append(ill)
-    # save data to file
-    out.writerow(data_item)
 
-test2()
+    for size in drange(1.0, 5.0, 1.0):
+
+        data_item = ['size', size]
+        for light_pos in drange(range_start,range_end, range_step):
+            print "SIZE %s" % size
+            print 'writing row %s' % light_pos
+            EOS_API('light', [light_pos, size, 1.0, falloff_curve])
+            time.sleep(0.5)
+            ill = ask_illuminance()
+            data_item.append(ill)
+        # save data to file
+        out.writerow(data_item)
+
+def test3():
+    """gamma test"""
+    pass
