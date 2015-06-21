@@ -50,6 +50,10 @@ def set(opts):
     eos.set(map(lambda o: float(o), opts))
     return "lights set to" % opts
 
+def setRaw(opts):
+    eos.setRaw(opts)
+    return "lights raw set to" % opts
+
 def all(opts):
     eos.all(float(opts[0]))
     return "set all lights to intensity %s" % opts[0]
@@ -131,6 +135,7 @@ actions = {
     'allon':        allOn,
     'one':          one,
     'set':          set,
+    'setRaw':       setRaw,
     'all':          all,
     'only':         only,
     'on':           on,

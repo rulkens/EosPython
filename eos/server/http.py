@@ -3,6 +3,9 @@
 # ===========================================================================
 # default server for communicating with the EOS from outside with a
 # REST interface
+#
+# environment variables
+# * EOS_HTTP_PORT (5152) - the default http port
 # ===========================================================================
 
 from flask import Flask, jsonify, render_template
@@ -19,7 +22,7 @@ def hello():
     now = datetime.datetime.now()
     timeString = now.strftime("%Y-%m-%d %H:%M")
     return render_template('simple.html')
-    
+
 @server.route("/api/<action>", defaults={'args':''})
 @server.route("/api/<action>/<args>")
 def api_handler(action, args=''):

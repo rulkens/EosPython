@@ -2,6 +2,11 @@
 
 # ===========================================================================
 # default TCP server for communicating with the EOS from outside
+#
+# uses the following environment variables
+#
+# * EOS_TCP_PORT - the port the server is listening to
+#
 # ===========================================================================
 
 import socket
