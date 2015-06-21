@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+# HTTP REST DAEMON
 from eos.server.http import main
 # run server
 main()

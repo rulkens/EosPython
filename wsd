@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+# WEBSOCKETS DAEMON
 from eos.server.ws import main
 # run server
 main()
