@@ -79,6 +79,7 @@ class EOS_Driver:
         return self.status
 
     def oneRaw(self, index, value):
+        """set a specific light to a PWM value (0-4095)"""
         light = self.__getLightIndex(index)
         self.pwms[light[0]].setPWM(light[1], 0, value)
         self.status[index] = value  # update status
@@ -89,10 +90,10 @@ class EOS_Driver:
         for index, value in enumerate(values):
             self.one(index, value)
         return self.status
-        
+
     def setRaw(self, values):
         """set all lights to the raw (PWM) value in the list provided"""
-        or index, value in enumerate(values):
+        for index, value in enumerate(values):
             self.oneRaw(index, value)
         return self.status
 

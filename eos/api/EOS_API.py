@@ -135,7 +135,7 @@ actions = {
     'allon':        allOn,
     'one':          one,
     'set':          set,
-    'setRaw':       setRaw,
+    'setraw':       setRaw,
     'all':          all,
     'only':         only,
     'on':           on,
