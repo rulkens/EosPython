@@ -1,5 +1,5 @@
 *.pyc
 ._*
 .idea
-eos/server/public/vendor
+eos/server/public/vendor/
 nohup.out
