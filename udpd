@@ -1,0 +1,6 @@
+#!/usr/bin/python
+
+# UDP SOCKET DAEMON
+from eos.server.udp import main
+# run server
+main()

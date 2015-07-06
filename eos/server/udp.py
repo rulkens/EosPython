@@ -40,7 +40,7 @@ import logging
 import os
 from struct import *
 import time
-# from eos.driver.EOS_Driver import EOS_Driver
+from eos.driver.EOS_Driver import EOS_Driver
 
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -59,17 +59,19 @@ ERROR_API = '\x04'    # when something goes wrong in calling the API
 ERROR_FORMAT = '\x05' # something wrong with unpacking the message
 
 # Try to create the UDP socket
-try :
+try:
     socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     logging.info('Socket created')
 except socket.error, msg :
     logging.info('Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
 
-# mock for EOS API
-def EOS_API(action, args):
-    """MOCK for EOS API """
-    logging.info('EOS API called with %s, %s', action, args)
+# Try to create Driver
+try:
+    eos = EOS_Driver()
+except Exception, e:
+    logging.warn('Failed to initialize driver. Exiting!')
+    sys.exit()
 
 def is_valid_pwm_seq(seq):
     """check if each item in the sequence is between 0 and 4095"""
@@ -88,6 +90,7 @@ def act_on(data, addr):
     if data == MESSAGE_INIT:
         # reset the counter for this address
         seq_counters[addr] = 0
+        logging.info('INIT OK %s' % addr)
         return 'IOK'
 
     seq_count = seq_counters[addr]
@@ -119,7 +122,7 @@ def act_on(data, addr):
     pwm_list = msg['pwm_values']
     # call the API
     try:
-        EOS_API('setRaw', pwm_list)
+        eos.setRaw(pwm_list)
     except Exception, error_msg:
         logging.warn('Something went wrong in the EOS API: %s', error_msg)
         return ERROR_START + ERROR_API + pack_seq
@@ -154,13 +157,13 @@ def main():
         data = d[0]
         addr = d[1]
 
-        if addr in seq_counters:
+        if addr[0] in seq_counters:
             # addr already made earlier contact
             logging.info('Address known %s' % addr[0])
         else:
             # create a new record and set it to 0
             logging.info('New client %s' % addr[0])
-            seq_counters[addr] = 0
+            seq_counters[addr[0]] = 0
 
         if not data:
             break
@@ -168,7 +171,7 @@ def main():
         logging.info("Receive some data")
         logging.info(to_hex(data))
 
-        reply = act_on(data, addr)
+        reply = act_on(data, addr[0])
 
         socket.sendto(reply, addr)
 

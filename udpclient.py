@@ -19,7 +19,7 @@ seq_number = 1
 
 def get_pwm_values():
     # give a tiny value (255 of 4096)
-    return '\x00\xFF' * 32
+    return '\x0E\xFF' * 32
 
 def to_hex(val):
     return ":".join("{:02x}".format(ord(c)) for c in val)
