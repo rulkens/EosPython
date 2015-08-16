@@ -9,12 +9,13 @@ import math
 # the code assumes we have two 12bit LED drivers, with I2C addresses 0x40 and 0x41
 # <http://www.adafruit.com/products/815>
 #
-# TODO: be able to
-#       - override the default addresses,
+# this driver is able to
 #       - set PWM frequency,
-#       - detect which driver controls which lights,
+#       - use two different drivers to control the lights
 #       - map the driver addresses to the physical light positions
 #       - apply gamma correction
+#       - provide intuitive control over the individual lamps as well
+#         as low-level access to the PWM API
 #
 # lights are arranged from bottom (index = 0) to top (index = 31)
 # ===========================================================================

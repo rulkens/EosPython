@@ -40,6 +40,7 @@ import logging
 import os
 from struct import *
 import time
+# uses the low-level eos driver instead of the EOS_API for maximum performance
 from eos.driver.EOS_Driver import EOS_Driver
 
 logging.getLogger().setLevel(logging.DEBUG)
