@@ -1,0 +1,14 @@
+#!/usr/bin/python
+
+# turn off all lights
+
+from eos.driver.EOS_LEDDriver import EOS_LEDDriver
+from eos.driver.EOS_Driver import EOS_Driver
+
+print "Turn all LEDS off"
+led_driver = EOS_LEDDriver()
+led_driver.allOff()
+
+print "Turn all halogens off"
+halogen_driver = EOS_Driver()
+halogen_driver.allOff()
