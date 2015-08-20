@@ -92,7 +92,7 @@ class EOS_LEDDriver:
         for index, value in enumerate(values):
             # TODO: convert from normalized to absolute color
             # [0-1, 0-1, 0-1]
-            self.driver.setPixelColor(index, self.__rgbToRbg(color))
+            self.driver.setPixelColor(index, self.__rgbToRbg(value))
         self.driver.show()
         self.status = values
         return self.status
@@ -100,7 +100,7 @@ class EOS_LEDDriver:
     def setRaw(self, values):
         """set all leds to the raw (0xRRGGBB) value in the list provided"""
         for index, value in enumerate(values):
-            self.driver.setPixelColor(index, self.__rgbToRbg(color))
+            self.driver.setPixelColor(index, self.__rgbToRbg(value))
         self.driver.show()
         return self.status
 

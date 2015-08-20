@@ -42,22 +42,30 @@ from struct import *
 import time
 # uses the low-level eos driver instead of the EOS_API for maximum performance
 from eos.driver.EOS_Driver import EOS_Driver
+from eos.driver.EOS_LEDDriver import EOS_LEDDriver
 
 logging.getLogger().setLevel(logging.DEBUG)
 
 # create an dictionary to remember the sequence number for each client address
 seq_counters = {}
 
-MESSAGE_INIT = '\xFE\xF0'
-MESSAGE_ACTION = '\xFE\xF1'
-NUM_LIGHTS = 32
+MESSAGE_INIT =      '\xFE\xF0'
+MESSAGE_HALOGEN =   '\xFE\xF1'
+MESSAGE_LED =       '\xFE\xF2'
+
+NUM_HALOGEN_LIGHTS = 32
+NUM_LED_LIGHTS = 120
 
 ERROR_START = 'MER'   # short for MESSAGE_ERROR
 ERROR_ACK = '\x01'    # the acknowledgement bytes are not valid
 ERROR_SEQ = '\x02'    # seq_number is not valid (has already been used?)
 ERROR_PWM = '\x03'    # PWM values are not valid
-ERROR_API = '\x04'    # when something goes wrong in calling the API
-ERROR_FORMAT = '\x05' # something wrong with unpacking the message
+
+ERROR_H_API = '\x04'  # when something goes wrong in calling the halogen API
+ERROR_H_FORMAT = '\x05' # something wrong with unpacking the message
+
+ERROR_L_API = '\x06'  # when something goes wrong calling the LED API
+ERROR_L_FORMAT = '\x07' # something wrong with unpacking the LED message
 
 # Try to create the UDP socket
 try:
@@ -71,8 +79,15 @@ except socket.error, msg :
 try:
     eos = EOS_Driver()
 except Exception, e:
-    logging.warn('Failed to initialize driver. Exiting!')
+    logging.warn('Failed to initialize halogen driver. Exiting!')
     sys.exit()
+
+try:
+    eosled = EOS_LEDDriver()
+except Exception, e:
+    logging.warn('Failed to initialize LED driver. Exiting!')
+    sys.exit()
+
 
 def is_valid_pwm_seq(seq):
     """check if each item in the sequence is between 0 and 4095"""
@@ -96,37 +111,64 @@ def act_on(data, addr):
 
     seq_count = seq_counters[addr]
     logging.info('seq count for addr (%s, %s)' % (seq_count, addr))
-    # try to make a struct out of it
-    try:
-        raw_msg = list(unpack('>ccL32H', data))
-        msg = { 'ack': raw_msg[0] + raw_msg[1], 'seq_number': raw_msg[2], 'pwm_values': raw_msg[-NUM_LIGHTS:]}
-        logging.info('message %s' % msg)
-    except Exception, error_msg:
-        logging.warn('unpacking message failed. Error  : %s' % error_msg)
-        logging.warn(len(data))
-        return ERROR_START + ERROR_FORMAT
+
+    ack = (data[0] + data[1])
+
+    # HALOGEN LIGHT PARSING
+    if ack == MESSAGE_HALOGEN :
+        # try to make a struct out of it
+        try:
+            raw_msg = list(unpack('>ccL' + str(NUM_HALOGEN_LIGHTS) + 'H', data))
+            msg = { 'ack': raw_msg[0] + raw_msg[1], 'seq_number': raw_msg[2], 'light_values': raw_msg[-NUM_HALOGEN_LIGHTS:]}
+            logging.info('message %s' % msg)
+        except Exception, error_msg:
+            logging.warn('unpacking message failed. Error  : %s' % error_msg)
+            logging.warn(len(data))
+            return ERROR_START + ERROR_H_FORMAT
+
+    # LED LIGHT PARSING
+    if ack == MESSAGE_LED :
+        # try to make a struct out of it
+        try:
+            # a LOT more data than the halogen lights
+            raw_msg = list(unpack('>ccL' + str(NUM_LED_LIGHTS) + 'L', data))
+            msg = { 'ack': raw_msg[0] + raw_msg[1], 'seq_number': raw_msg[2], 'light_values': raw_msg[-NUM_LED_LIGHTS:]}
+            logging.info('message %s' % msg)
+        except Exception, error_msg:
+            logging.warn('unpacking message failed. Error  : %s' % error_msg)
+            logging.warn(len(data))
+            return ERROR_START + ERROR_L_FORMAT
 
     # already pack the sequence number, ready to be Send
     pack_seq = pack('>L', msg['seq_number'])
 
     # handle all sort of errors
-    if msg['ack'] != MESSAGE_ACTION:
+    if msg['ack'] != MESSAGE_HALOGEN and ack != MESSAGE_LED:
         logging.warn('ack not valid!')
         return ERROR_START + ERROR_ACK + pack_seq
     if msg['seq_number'] <= seq_count:
         logging.warn('seq_number not valid!')
         return ERROR_START + ERROR_SEQ + pack_seq
-    if not is_valid_pwm_seq(msg['pwm_values']):
+    if not is_valid_pwm_seq(msg['light_values']) and ack == MESSAGE_HALOGEN:
         logging.warn('pwm_values not valid!')
         return ERROR_START + ERROR_PWM + pack_seq
 
-    pwm_list = msg['pwm_values']
+    light_values = msg['light_values']
+
     # call the API
-    try:
-        eos.setRaw(pwm_list)
-    except Exception, error_msg:
-        logging.warn('Something went wrong in the EOS API: %s', error_msg)
-        return ERROR_START + ERROR_API + pack_seq
+    if ack == MESSAGE_HALOGEN :
+        try:
+            eos.setRaw(light_values)
+        except Exception, error_msg:
+            logging.warn('Something went wrong in the EOS Halogen API: %s', error_msg)
+            return ERROR_START + ERROR_H_API + pack_seq
+
+    if ack == MESSAGE_LED :
+        try:
+            eosled.set(light_values)
+        except Exception, error_msg:
+            logging.warn('Something went wrong in the EOS LED API: %s', error_msg)
+            return ERROR_START + ERROR_L_API + pack_seq
 
     # set the current sequence number to the one retrieved from the message
     seq_counters[addr] = msg['seq_number']
