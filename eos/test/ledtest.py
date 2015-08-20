@@ -135,8 +135,8 @@ def one_by_one():
 def hls_to_rgb(h, l, s):
 	col = colorsys.hls_to_rgb(h, l, s)
 	#print col
-	r = int(col[0] * 255)
-	g = int(col[1] * 255)
-	b = int(col[2] * 255)
+	r = int(col[0] * 0xFF)
+	g = int(col[1] * 0xFF)
+	b = int(col[2] * 0xFF)
 	#print "r %s g %s b %s" % (r, g, b)
 	return (r << 16) + (g << 8) + b

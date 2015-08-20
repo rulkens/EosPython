@@ -5,11 +5,14 @@ import math
 import numpy as np
 
 from eos.driver.EOS_Driver import EOS_Driver
+from eos.driver.EOS_LEDDriver import EOS_LEDDriver
+
 from eos.actions.Glow import Glow
 from eos.actions.Pong import Pong
 from eos.actions.BinaryClock import BinaryClock
 
 from Light import Light
+from ColorLight import ColorLight
 
 # ===========================================================================
 # Higher level EOS api
@@ -24,13 +27,15 @@ from Light import Light
 
 # create the Eos_Driver object
 eos = EOS_Driver()
+eosled = EOS_LEDDriver()
 
 FRAMERATE = 60
-NUM_LIGHTS = eos.NUM_LIGHTS
+NUM_HALOGEN_LIGHTS = eos.NUM_LIGHTS
+NUM_LED_LIGHTS = eosled.NUM_LIGHTS
 
 # some constants
 SLEEP_TIME = 1/FRAMERATE
-LIGHTS_SEC = FRAMERATE * NUM_LIGHTS
+LIGHTS_SEC = FRAMERATE * NUM_HALOGEN_LIGHTS
 
 # functions
 def allOff(opts):
@@ -122,12 +127,18 @@ def clock(opts):
         clocker.resume()
 
 def light(opts):
-    size = float(opts[1])/NUM_LIGHTS # light size
+    size = float(opts[1])/NUM_HALOGEN_LIGHTS # light size
     light = Light(size=size, intensity=float(opts[2]), falloff_curve=opts[3])
     light.position = float(opts[0])
     # set the actual light
     return eos.set(light.result())
 
+def colorlight(opts):
+    size = float(opts[1])/NUM_LED_LIGHTS # light size
+    light = ColorLight(size=size, intensity=float(opts[2]), falloff_curve=opts[3], color=opts[4])
+    light.position = float(opts[0])
+    # set the actual light
+    return eosled.set(light.result())
 
 # overview of all the actions possible
 actions = {
@@ -150,7 +161,10 @@ actions = {
 
     'setfreq':      setFreq,
     'status':       status,
-    'gamma':        gamma
+    'gamma':        gamma,
+
+    # LED actions
+    'colorlight':   colorlight
 }
 
 def errorHandler(error):
