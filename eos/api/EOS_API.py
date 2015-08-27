@@ -187,7 +187,6 @@ def color_light(opts):
     color       = o.get(1)
     intensity   = o.get(2, 1.0)
     size        = o.get(3, 10.0)
-    print ' -- intensity %s' % intensity
     falloff_curve = o.get(4, 'linear')
 
     size = float(size)/NUM_LED_LIGHTS # light size

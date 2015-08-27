@@ -64,7 +64,6 @@ def gradient(steps, start_color, end_color, colorspace='hsv'):
         rgb_values = [transition3(i, steps, start_rgb, end_rgb) for i in range(0, steps)]
         rgb_values = map(rgb_to_color, rgb_values)
 
-    print rgb_values
     # map back to rgb values
     return rgb_values
 

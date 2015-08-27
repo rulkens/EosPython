@@ -43,14 +43,9 @@ class ColorLight:
         self.rgb = cutil.color_to_rgb(self.color)
         self.hls = cutil.color_to_hls(self.color)
 
-        print 'hls'
-        print self.hls
-
         # apply the falloff curve
         values = map(lambda i: self._color_at(i), values)
         # values = np.clip(values, 0, 1)
-
-        print('values %s' % values)
         # return
         return values
 
@@ -58,9 +53,7 @@ class ColorLight:
         """get the intensity of the light at a certain position"""
         distance = abs(pos - self.position)
         intensity = self.falloff_curves[self.falloff_curve](distance, self.size/2.0)
-        print "intensity %s" % intensity
         intensity = np.clip(intensity, 0, 1) * self.intensity
 
         color = cutil.hls_to_color((self.hls[0], self.hls[1] * intensity, self.hls[2]))
-        print "color %s %s" % (pos, hex(color))
         return color
