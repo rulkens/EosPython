@@ -2,6 +2,8 @@ import numpy as np
 import math
 import colorsys
 
+import eos.api.colorutil as cutil
+
 # ===========================================================================
 # Color Light class
 # provides an abstract light that can be positioned in some place on the lamp
@@ -10,11 +12,16 @@ import colorsys
 
 # generic light class
 class ColorLight:
-    def __init__(self, position = 0.0, size = 1.0, intensity = 1.0, color = 0xFFFFFF, falloff_curve='linear', num_lights=120):
+    def __init__(self, position = 0.0, size = 10.0, intensity = 1.0, color = 0xFFFFFF, falloff_curve='quad', num_lights=120):
         self.position = position
         self.size = size
         self.intensity = intensity
-        self.color = int(color, base=0)
+        # support hex definitions
+        try:
+            self.color = int(color, 0)
+        except TypeError:
+            self.color = int(color)
+            print 'color %s' % self.color
 
         self.falloff_curve = falloff_curve
         self.num_lights = num_lights
@@ -33,14 +40,11 @@ class ColorLight:
         # clip intensities
         values = np.clip(values, 0, 1)
 
-        b = float(self.color & 0xFF) / 0xFF
-        g = float((self.color >> 8) & 0xFF) / 0xFF
-        r = float((self.color >> 16) & 0xFF) / 0xFF
-        # compute the color
-        self.rgb = (r,g,b)
-        self.hls = colorsys.rgb_to_hls(self.rgb[0], self.rgb[1], self.rgb[2])
+        self.rgb = cutil.color_to_rgb(self.color)
+        self.hls = cutil.color_to_hls(self.color)
 
-        print self.rgb
+        print 'hls'
+        print self.hls
 
         # apply the falloff curve
         values = map(lambda i: self._color_at(i), values)
@@ -54,18 +58,9 @@ class ColorLight:
         """get the intensity of the light at a certain position"""
         distance = abs(pos - self.position)
         intensity = self.falloff_curves[self.falloff_curve](distance, self.size/2.0)
-        intensity = np.clip(intensity, 0, 1) * self.intensity
         print "intensity %s" % intensity
-        color = hls_to_color(self.hls[0], self.hls[1] * intensity, self.hls[2])
+        intensity = np.clip(intensity, 0, 1) * self.intensity
+
+        color = cutil.hls_to_color((self.hls[0], self.hls[1] * intensity, self.hls[2]))
         print "color %s %s" % (pos, hex(color))
         return color
-
-def hls_to_color(h, l, s):
-    """convert hls to an integer color"""
-    col = colorsys.hls_to_rgb(h, l, s)
-    print col
-    r = int(col[0] * 0xFF)
-    g = int(col[1] * 0xFF)
-    b = int(col[2] * 0xFF)
-    #print "r %s g %s b %s" % (r, g, b)
-    return (r << 16) + (g << 8) + b
