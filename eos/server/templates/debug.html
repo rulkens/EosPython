@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>EOS Debug tools</h2>
+
+    <!-- intensity slider -->
+    <div class="row row-section">
+        <div class="col-xs-12 col-sm-6">
+            <input type="number"
+                   id="intensitySlider"
+                   data-slider-id="intensitySlider"
+                   data-slider-min="0"
+                   data-slider-max="1"
+                   data-slider-step="0.005"
+                   data-slider-value="0"/>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <label for="intensitySlider" class="slider-label">Intensity</label>
+        </div>
+    </div>
+
+    <!-- step slider -->
+    <div class="row row-section">
+        <div class="col-xs-12 col-sm-6">
+            <input type="number"
+                   id="stepSlider"
+                   data-slider-id="stepSlider"
+                   data-slider-min="0"
+                   data-slider-max="31"
+                   data-slider-step="1"
+                   data-slider-value="0"/>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <label for="stepSlider" class="slider-label">Step</label>
+        </div>
+    </div>
+
+    <!-- gamma slider -->
+    <div class="row row-section">
+        <div class="col-xs-12 col-sm-6">
+            <input type="number"
+                   id="gammaSlider"
+                   data-slider-id="gammaSlider"
+                   data-slider-min="0"
+                   data-slider-max="4"
+                   data-slider-step="0.01"
+                   data-slider-value="1"/>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <label for="stepSlider" class="slider-label">Gamma</label>
+        </div>
+    </div>
+
+{% end %}

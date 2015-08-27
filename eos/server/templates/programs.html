@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- programs -->
+<div class="row">
+    <div class="col-xs-12">
+        <h2>Light</h2>
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="lightPosSlider"
+                       data-slider-id="lightPosSlider"
+                       data-slider-min="0"
+                       data-slider-max="1"
+                       data-slider-step="0.005"
+                       data-slider-value="0"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="lightPosSlider" class="slider-label">Position</label>
+            </div>
+        </div>
+
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="lightSizeSlider"
+                       data-slider-id="lightSizeSlider"
+                       data-slider-min="0"
+                       data-slider-max="8"
+                       data-slider-step="0.1"
+                       data-slider-value="3"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="lightSizeSlider" class="slider-label">Size</label>
+            </div>
+        </div>
+
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="lightIntensitySlider"
+                       data-slider-id="lightIntensitySlider"
+                       data-slider-min="0"
+                       data-slider-max="2"
+                       data-slider-step="0.02"
+                       data-slider-value="1"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="lightIntensitySlider" class="slider-label">Intensity</label>
+            </div>
+        </div>
+
+        <h2>Glow</h2>
+        <div class="row row-section">
+            <div class="col-xs-6">
+                <input type="checkbox" data-toggle="toggle" data-size="large" id="glowToggle">
+            </div>
+            <div class="col-xs-6">
+                <label for="glowToggle">
+                    Toggle Glow functionality
+                </label>
+            </div>
+        </div>
+
+        <h2>Pong</h2>
+        <div class="row row-section">
+            <div class="col-xs-6">
+                <input type="checkbox" data-toggle="toggle" data-size="large" id="pongToggle">
+            </div>
+            <div class="col-xs-6">
+                <label for="glowToggle">
+                    Toggle Pong functionality
+                </label>
+            </div>
+        </div>
+
+        <h2>Clock</h2>
+        <div class="row row-section">
+            <div class="col-xs-6">
+                <input type="checkbox" data-toggle="toggle" data-size="large" id="clockToggle">
+            </div>
+            <div class="col-xs-6">
+                <label for="glowToggle">
+                    Toggle Binary Clock
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% end %}

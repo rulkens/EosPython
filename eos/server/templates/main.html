@@ -12,55 +12,6 @@
     </div>
 </div>
 
-<!-- intensity slider -->
-<div class="row row-section">
-    <div class="col-xs-12 col-sm-6">
-        <input type="number"
-               id="intensitySlider"
-               data-slider-id="intensitySlider"
-               data-slider-min="0"
-               data-slider-max="1"
-               data-slider-step="0.005"
-               data-slider-value="0"/>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <label for="intensitySlider" class="slider-label">Intensity</label>
-    </div>
-</div>
-
-<!-- step slider -->
-<div class="row row-section">
-    <div class="col-xs-12 col-sm-6">
-        <input type="number"
-               id="stepSlider"
-               data-slider-id="stepSlider"
-               data-slider-min="0"
-               data-slider-max="31"
-               data-slider-step="1"
-               data-slider-value="0"/>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <label for="stepSlider" class="slider-label">Step</label>
-    </div>
-</div>
-
-<!-- gamma slider -->
-<div class="row row-section">
-    <div class="col-xs-12 col-sm-6">
-        <input type="number"
-               id="gammaSlider"
-               data-slider-id="gammaSlider"
-               data-slider-min="0"
-               data-slider-max="4"
-               data-slider-step="0.01"
-               data-slider-value="1"/>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <label for="stepSlider" class="slider-label">Gamma</label>
-    </div>
-</div>
-
-<!-- programs -->
 <div class="row">
     <div class="col-xs-12">
         <h2>Light</h2>
@@ -108,6 +59,66 @@
                 <label for="lightIntensitySlider" class="slider-label">Intensity</label>
             </div>
         </div>
+
+        <!-- COLOR -->
+        <h2>Color Light</h2>
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="ledLightPosSlider"
+                       data-slider-id="ledLightPosSlider"
+                       data-slider-min="0"
+                       data-slider-max="1"
+                       data-slider-step="0.005"
+                       data-slider-value="0"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="ledLightPosSlider" class="slider-label">Position</label>
+            </div>
+        </div>
+
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="ledLightSizeSlider"
+                       data-slider-id="ledLightSizeSlider"
+                       data-slider-min="0"
+                       data-slider-max="100"
+                       data-slider-step="1"
+                       data-slider-value="10"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="ledLightSizeSlider" class="slider-label">Size</label>
+            </div>
+        </div>
+
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="number"
+                       id="ledLightIntensitySlider"
+                       data-slider-id="ledLightIntensitySlider"
+                       data-slider-min="0"
+                       data-slider-max="2"
+                       data-slider-step="0.02"
+                       data-slider-value="1"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="ledLightIntensitySlider" class="slider-label">Intensity</label>
+            </div>
+        </div>
+
+        <div class="row row-section">
+            <div class="col-xs-12 col-sm-6">
+                <input type="text"
+                       id="ledLightColor"
+                       data-spectrum/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <label for="ledLightColor" class="slider-label">Intensity</label>
+            </div>
+        </div>
+
+<!-- programs -->
 
         <h2>Glow</h2>
         <div class="row row-section">

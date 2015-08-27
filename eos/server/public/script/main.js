@@ -58,7 +58,10 @@ $(document).ready(function(){
             }
 
             // light indicators
-            $('.light-indicator').style('background', 'background: -webkit-linear-gradient(left, #1e5799 0%,#2989d8 50%,#207cca 81%,#7db9e8 100%)');
+            if($('.light-indicator').length > 0){
+              //$('.light-indicator').style('background', 'background: -webkit-linear-gradient(left, #1e5799 0%,#2989d8 50%,#207cca 81%,#7db9e8 100%)');
+            }
+
         },
         defaultApi = function(action, args){
             return eos.api(action, args, apiHandler);
@@ -78,26 +81,33 @@ $(document).ready(function(){
         preventChange = false;
     });
 
-    $('#stepSlider').slider().on('change', function(e){
-        defaultApi('only', [$(this).slider('getValue'), 1]);
-    });
-
-    $('#intensitySlider').slider().on('change', function(e){
-        defaultApi('all', [$(this).slider('getValue')]);
-    });
-
-    $('#gammaSlider').slider().on('change', function(e){
-        defaultApi('gamma', [$(this).slider('getValue')]);
-    });
-
-    // for all the individual lights
-    $('[data-slider]').slider();
-    $('[data-slider]').on('change', function(e){
-        var id = $(this).data('light');
-        defaultApi('one', [id, $(this).slider('getValue')]);
-    });
+    if($('#stepSlider').length > 0){
+      $('#stepSlider').slider().on('change', function(e){
+          defaultApi('only', [$(this).slider('getValue'), 1]);
+      });
+    }
 
 
+    if($('#intensitySlider').length > 0){
+      $('#intensitySlider').slider().on('change', function(e){
+          defaultApi('all', [$(this).slider('getValue')]);
+      });
+    }
+
+    if($('#gammaSlider').length > 0){
+      $('#gammaSlider').slider().on('change', function(e){
+          defaultApi('gamma', [$(this).slider('getValue')]);
+      });
+    }
+
+    if($('[data-slider]').length > 0){
+      // for all the individual lights
+      $('[data-slider]').slider();
+      $('[data-slider]').on('change', function(e){
+          var id = $(this).data('light');
+          defaultApi('one', [id, $(this).slider('getValue')]);
+      });
+    }
 
     // for programs
 
@@ -113,20 +123,27 @@ $(document).ready(function(){
             return [light.pos, light.size, light.intensity, light.falloff]
         };
 
-    $('#lightPosSlider').slider().on('change', function(e){
-        light.pos = $(this).slider('getValue');
-        defaultApi('light', lightArray());
-    });
+    if($('#lightPosSlider').length > 0){
+      $('#lightPosSlider').slider().on('change', function(e){
+          light.pos = $(this).slider('getValue');
+          defaultApi('light', lightArray());
+      });
+    }
 
-    $('#lightSizeSlider').slider().on('change', function(e){
-        light.size = $(this).slider('getValue');
-        defaultApi('light', lightArray());
-    });
+    if($('#lightSizeSlider').length > 0){
+      $('#lightSizeSlider').slider().on('change', function(e){
+          light.size = $(this).slider('getValue');
+          defaultApi('light', lightArray());
+      });
+    }
 
-    $('#lightIntensitySlider').slider().on('change', function(e){
-        light.intensity = $(this).slider('getValue');
-        defaultApi('light', lightArray());
-    });
+    if($('#lightIntensitySlider').length > 0){
+      $('#lightIntensitySlider').slider().on('change', function(e){
+          light.intensity = $(this).slider('getValue');
+          defaultApi('light', lightArray());
+      });
+    }
+
 
     // GLOW
     $('#glowToggle').change(function(item){
@@ -145,4 +162,48 @@ $(document).ready(function(){
         var arguments = [$(this).prop('checked') ? 'on' : 'off'];
         defaultApi('clock', arguments );
     });
+
+    // COLOR Light
+    var ledLight = {
+            pos: 0,
+            size: 10,
+            intensity: 0.5,
+            falloff: 'quad',
+            color: 0xFF0000
+        },
+        ledLightArray = function(){
+            return [ledLight.pos, ledLight.color, ledLight.intensity, ledLight.size, ledLight.falloff]
+        };
+
+    if($('#ledLightPosSlider').length > 0){
+      $('#ledLightPosSlider').slider().on('change', function(e){
+          ledLight.pos = $(this).slider('getValue');
+          defaultApi('color_light', ledLightArray());
+      });
+    }
+
+    if($('#ledLightSizeSlider').length > 0){
+      $('#ledLightSizeSlider').slider().on('change', function(e){
+          ledLight.size = $(this).slider('getValue');
+          defaultApi('color_light', ledLightArray());
+      });
+    }
+
+    if($('#ledLightIntensitySlider').length > 0){
+      $('#ledLightIntensitySlider').slider().on('change', function(e){
+          ledLight.intensity = $(this).slider('getValue');
+          defaultApi('color_light', ledLightArray());
+      });
+    }
+
+    if($('#ledLightColor').length > 0){
+        $('#ledLightColor').spectrum({
+          color: '#ff0000',
+          flat: true,
+          showButtons: false
+        }).on('move.spectrum', function(e, color){
+          ledLight.color = '0x' + color.toHex();
+          defaultApi('color_light', ledLightArray());
+        })
+    }
 });

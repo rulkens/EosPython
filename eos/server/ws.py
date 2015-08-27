@@ -18,7 +18,12 @@ class Application(tornado.web.Application):
     def __init__(self):
         EosRouter = sockjs.tornado.SockJSRouter(EosConnection, '/api')
 
-        handlers = [(r"/", IndexHandler), (r"/help/", HelpHandler)] + EosRouter.urls
+        handlers = [
+            (r"/", IndexHandler),
+            (r"/help/", HelpHandler),
+            (r"/leds/", LedsHandler),
+            (r"/programs/", ProgramsHandler),
+            (r"/debug/", DebugHandler) ] + EosRouter.urls
 
         settings = dict(
             cookie_secret="_-:RR8.!|9v=2N_e0!.9^+.+;~7!*k^~4U~.1F=*9N!1~^q0!~:-k2.!^xJ..a",
@@ -32,12 +37,24 @@ class Application(tornado.web.Application):
 class IndexHandler(tornado.web.RequestHandler):
     """Regular HTTP handler to serve the main page"""
     def get(self):
-        self.render('socket_main.html')
+        self.render('main.html')
+
+class ProgramsHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('programs.html')
+
+class LedsHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('leds.html')
 
 class HelpHandler(tornado.web.RequestHandler):
     """Regular HTTP handler to serve the help page"""
     def get(self):
         self.render('help.html')
+
+class DebugHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('debug.html')
 
 class EosConnection(sockjs.tornado.SockJSConnection):
     """Chat connection implementation"""
