@@ -72,6 +72,7 @@ class EOS_LEDDriver:
         return self.status
 
     def one(self, index, color):
+        """set a specific light to a color value (0-0xFFFFFF)"""
         """set a specific light to a normalized value intensity tuple with 3 values (0-1, 0-1, 0-1)"""
         # TODO: set light
         self.driver.setPixelColor(index, self.__rgbToRbg(color))
@@ -80,14 +81,8 @@ class EOS_LEDDriver:
         self.status[index] = color  # update status
         return self.status
 
-    def oneRaw(self, index, color):
-        """set a specific light to a color value (0-0xFFFFFF)"""
-        self.driver.setPixelColor(index, self.__rgbToRbg(color))
-        self.driver.show()
-        self.status[index] = value  # update status
-        return self.status
-
     def set(self, values):
+        """set all leds to the raw (0xRRGGBB) value in the list provided"""
         """set all lights to the value in the list provided"""
         for index, value in enumerate(values):
             # TODO: convert from normalized to absolute color
@@ -95,13 +90,6 @@ class EOS_LEDDriver:
             self.driver.setPixelColor(index, self.__rgbToRbg(value))
         self.driver.show()
         self.status = values
-        return self.status
-
-    def setRaw(self, values):
-        """set all leds to the raw (0xRRGGBB) value in the list provided"""
-        for index, value in enumerate(values):
-            self.driver.setPixelColor(index, self.__rgbToRbg(value))
-        self.driver.show()
         return self.status
 
     def all(self, color):
