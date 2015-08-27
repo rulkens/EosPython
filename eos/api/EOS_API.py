@@ -14,6 +14,8 @@ from eos.actions.BinaryClock import BinaryClock
 from Light import Light
 from ColorLight import ColorLight
 
+import eos.api.colorutil as cutil
+
 # ===========================================================================
 # Higher level EOS api
 #
@@ -27,11 +29,11 @@ from ColorLight import ColorLight
 
 # create the Eos_Driver object
 eos = EOS_Driver()
-eosled = EOS_LEDDriver()
+eos_led = EOS_LEDDriver()
 
 FRAMERATE = 60
 NUM_HALOGEN_LIGHTS = eos.NUM_LIGHTS
-NUM_LED_LIGHTS = eosled.NUM_LIGHTS
+NUM_LED_LIGHTS = eos_led.NUM_LIGHTS
 
 # some constants
 SLEEP_TIME = 1/FRAMERATE
@@ -133,12 +135,83 @@ def light(opts):
     # set the actual light
     return eos.set(light.result())
 
-def colorlight(opts):
-    size = float(opts[1])/NUM_LED_LIGHTS # light size
-    light = ColorLight(size=size, intensity=float(opts[2]), falloff_curve=opts[3], color=opts[4])
-    light.position = float(opts[0])
+
+## LED FUNCTIONALITY
+
+def color_allOff(opts):
+    eos_led.allOff()
+    return "all LEDs turned off"
+
+def color_allOn(opts):
+    eos_led.allOn()
+    return "all LEDs turned on"
+
+def color_one(opts):
+    eos_led.one(int(opts[0]), int(opts[1]))
+    return "LEDs %s turned to intensity %s" % (opts[0], opts[1])
+
+def color_set(opts):
+    # convert opts to a list of floats
+    eos_led.set(map(lambda o: int(o), opts))
+    return "LED set to" % opts
+
+def color_all(opts):
+    eos_led.all(float(opts[0]))
+    return "set all LEDs to intensity %s" % opts[0]
+
+def color_only(opts):
+    eos_led.only(int(opts[0]), int(opts[1]))
+    return "turn on only light %s to intensity %s" % (opts[0],opts[1])
+
+def color_on(opts=None):
+    """ 0: index of light to turn fully on """
+    if opts != None and opts != []:
+        eos_led.on(int(opts[0]))
+        return "light %s turned on" % opts[0]
+    else:
+        eos_led.allOn()
+        return "all LEDs turned on"
+
+def color_off(opts=None):
+    if opts != None and opts != []:
+        eos_led.off(int(opts[0]))
+        return "LED %s turned off" % opts[0]
+    else:
+        eos_led.allOff()
+        return "all LEDs turned off"
+
+
+def color_light(opts):
+    o           = OptList(opts)
+    position    = o.get(0)
+    color       = o.get(1)
+    intensity   = o.get(2, 1.0)
+    size        = o.get(3, 10.0)
+    print ' -- intensity %s' % intensity
+    falloff_curve = o.get(4, 'linear')
+
+    size = float(size)/NUM_LED_LIGHTS # light size
+    light = ColorLight(size=size, intensity=float(intensity), falloff_curve=falloff_curve, color=color)
+    light.position = float(position)
     # set the actual light
-    return eosled.set(light.result())
+    return eos_led.set(light.result())
+
+def color_gradient(opts):
+    """color gradient"""
+    o = OptList(opts)
+    color1 = int(o.get(0))
+    color2 = int(o.get(1))
+    colorspace = o.get(2, 'hsv')
+
+    vals = cutil.gradient(NUM_LED_LIGHTS, color1, color2, colorspace=colorspace)
+    return eos_led.set(vals)
+
+def color_gradients(opts):
+    """multiple color gradients"""
+    ## example: color_gradients 0 0xFF .5 0x0 1 0xFF
+    ## even arguments are locations (low to high), odd arguments are color values
+    gradients = reduce(cutil.opts_to_gradients, opts)
+
 
 # overview of all the actions possible
 actions = {
@@ -164,8 +237,23 @@ actions = {
     'gamma':        gamma,
 
     # LED actions
-    'colorlight':   colorlight
+    'color_light':        color_light,
+    'color_alloff':       color_allOff,
+    'color_allon':        color_allOn,
+    'color_one':          color_one,
+    'color_set':          color_set,
+    'color_all':          color_all,
+    'color_only':         color_only,
+    'color_on':           color_on,
+    'color_off':          color_off,
+    'color_gradient':     color_gradient
+
 }
+
+# simple option list class with default
+class OptList(list):
+    def get(self, index, default=None):
+        return self[index] if len(self) > index else default
 
 def errorHandler(error):
     print "the action cannot be run, error: %s" % error
