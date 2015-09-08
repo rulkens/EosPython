@@ -25,13 +25,13 @@ class Pong(Action):
         self._defaults(**kwargs)
         super(Pong, self).__init__()
 
-    def _defaults(self, speed=2.0, direction=1):
+    def _defaults(self, speed=5.0, direction=1):
         self.speed = speed
         self.direction = direction
 
         self.size = 3.0/NUM_LIGHTS # light size
 
-        self.light = Light(size=self.size, falloff_curve='linear', intensity=0.4)
+        self.light = Light(size=self.size, falloff_curve='linear', intensity=2.0)
 
     def run(self):
         logging.info('Glow initialized - and ready to go!')
