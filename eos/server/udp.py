@@ -35,6 +35,7 @@
 
 
 import socket
+import select
 import sys
 import logging
 import os
@@ -52,6 +53,7 @@ seq_counters = {}
 MESSAGE_INIT =      '\xFE\xF0'
 MESSAGE_HALOGEN =   '\xFE\xF1'
 MESSAGE_LED =       '\xFE\xF2'
+MESSAGE_PANIC =     '\xFE\xFF' # panic, turn everything off
 
 NUM_HALOGEN_LIGHTS = 32
 NUM_LED_LIGHTS = 120
@@ -67,9 +69,12 @@ ERROR_H_FORMAT = '\x05' # something wrong with unpacking the message
 ERROR_L_API = '\x06'  # when something goes wrong calling the LED API
 ERROR_L_FORMAT = '\x07' # something wrong with unpacking the LED message
 
+ERROR_PANIC = '\xFF' # panic mode doesn't work??
+
 # Try to create the UDP socket
 try:
     socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    socket.setblocking(0)
     logging.info('Socket created')
 except socket.error, msg :
     logging.info('Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
@@ -110,9 +115,18 @@ def act_on(data, addr):
         return 'IOK'
 
     seq_count = seq_counters[addr]
-    logging.info('seq count for addr (%s, %s)' % (seq_count, addr))
+    #logging.info('seq count for addr (%s, %s)' % (seq_count, addr))
 
     ack = (data[0] + data[1])
+
+    if ack == MESSAGE_PANIC :
+        try:
+            eosled.allOff()
+            eos.allOff()
+            return 'MOK'
+        except Exception, error_msg:
+            logging.warn('Something went wrong in the EOS LED API: %s', error_msg)
+            return ERROR_START + ERROR_PANIC + pack_seq
 
     # HALOGEN LIGHT PARSING
     if ack == MESSAGE_HALOGEN :
@@ -120,7 +134,7 @@ def act_on(data, addr):
         try:
             raw_msg = list(unpack('>ccL' + str(NUM_HALOGEN_LIGHTS) + 'H', data))
             msg = { 'ack': raw_msg[0] + raw_msg[1], 'seq_number': raw_msg[2], 'light_values': raw_msg[-NUM_HALOGEN_LIGHTS:]}
-            logging.info('message %s' % msg)
+            #logging.info('message %s' % msg)
         except Exception, error_msg:
             logging.warn('unpacking message failed. Error  : %s' % error_msg)
             logging.warn(len(data))
@@ -133,7 +147,7 @@ def act_on(data, addr):
             # a LOT more data than the halogen lights
             raw_msg = list(unpack('>ccL' + str(NUM_LED_LIGHTS) + 'L', data))
             msg = { 'ack': raw_msg[0] + raw_msg[1], 'seq_number': raw_msg[2], 'light_values': raw_msg[-NUM_LED_LIGHTS:]}
-            logging.info('message %s' % msg)
+            #logging.info('message %s' % msg)
         except Exception, error_msg:
             logging.warn('unpacking message failed. Error  : %s' % error_msg)
             logging.warn(len(data))
@@ -143,7 +157,7 @@ def act_on(data, addr):
     pack_seq = pack('>L', msg['seq_number'])
 
     # handle all sort of errors
-    if msg['ack'] != MESSAGE_HALOGEN and ack != MESSAGE_LED:
+    if msg['ack'] != MESSAGE_HALOGEN and ack != MESSAGE_LED and ack != MESSAGE_PANIC:
         logging.warn('ack not valid!')
         return ERROR_START + ERROR_ACK + pack_seq
     if msg['seq_number'] <= seq_count:
@@ -169,6 +183,8 @@ def act_on(data, addr):
         except Exception, error_msg:
             logging.warn('Something went wrong in the EOS LED API: %s', error_msg)
             return ERROR_START + ERROR_L_API + pack_seq
+
+
 
     # set the current sequence number to the one retrieved from the message
     seq_counters[addr] = msg['seq_number']
@@ -196,13 +212,19 @@ def main():
     # now keep talking with the client
     while 1:
         # receive data from client (data, addr)
-        d = socket.recvfrom(1024)
+        try:
+            d = socket.recvfrom(1024)
+        except Exception:
+            # no data here
+            continue
+
         data = d[0]
         addr = d[1]
 
         if addr[0] in seq_counters:
             # addr already made earlier contact
-            logging.info('Address known %s' % addr[0])
+            #logging.info('Address known %s' % addr[0])
+            x = 1
         else:
             # create a new record and set it to 0
             logging.info('New client %s' % addr[0])
@@ -211,12 +233,18 @@ def main():
         if not data:
             break
 
-        logging.info("Receive some data")
-        logging.info(to_hex(data))
+        #logging.info("Receive some data")
+        #logging.info(to_hex(data))
 
         reply = act_on(data, addr[0])
 
         socket.sendto(reply, addr)
+
+        # empty data in socket
+        while 1:
+            inputready, o, e = select.select([socket],[],[], 0.0)
+            if len(inputready)==0: break
+            for s in inputready: s.recv(1)
 
     socket.close()
 
