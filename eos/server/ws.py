@@ -62,6 +62,10 @@ class EosConnection(sockjs.tornado.SockJSConnection):
     participants = set()
 
     def on_open(self, info):
+
+        # don't wait
+        #self.set_nodelay(True)
+
         # Send that someone joined
         ret = EOS_API('status')
         ret['result'] = 'Someone joined'
@@ -83,6 +87,8 @@ class EosConnection(sockjs.tornado.SockJSConnection):
         self.broadcast(self.participants, ret)
 
     def on_close(self):
+
+        logging.info('closing connection')
         # Remove client from the clients list and broadcast leave message
         self.participants.remove(self)
 

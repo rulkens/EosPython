@@ -119,6 +119,11 @@ def act_on(data, addr):
 
     ack = (data[0] + data[1])
 
+    # check if ack is valid
+    if ack != MESSAGE_HALOGEN and ack != MESSAGE_LED and ack != MESSAGE_PANIC:
+            logging.warn('ack not valid!')
+            return ERROR_START + ERROR_ACK
+
     if ack == MESSAGE_PANIC :
         try:
             eosled.allOff()
@@ -154,12 +159,14 @@ def act_on(data, addr):
             return ERROR_START + ERROR_L_FORMAT
 
     # already pack the sequence number, ready to be Send
-    pack_seq = pack('>L', msg['seq_number'])
+    try:
+        pack_seq = pack('>L', msg['seq_number'])
+    except Exception, error_msg:
+        logging.warn('setting sq_number failed, Error : %s' % error_msg)
+        return ERROR_START + ERROR_SEQ
 
     # handle all sort of errors
-    if msg['ack'] != MESSAGE_HALOGEN and ack != MESSAGE_LED and ack != MESSAGE_PANIC:
-        logging.warn('ack not valid!')
-        return ERROR_START + ERROR_ACK + pack_seq
+
     if msg['seq_number'] <= seq_count:
         logging.warn('seq_number not valid!')
         return ERROR_START + ERROR_SEQ + pack_seq
