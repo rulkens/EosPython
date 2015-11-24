@@ -3,6 +3,7 @@
 import time
 import math
 from Adafruit_I2C import Adafruit_I2C
+import logging
 
 # ============================================================================
 # Adafruit PCA9685 16-Channel PWM Servo Driver
@@ -83,6 +84,23 @@ class PWM :
     self.i2c.write8(self.__LED0_ON_H+4*channel, on >> 8)
     self.i2c.write8(self.__LED0_OFF_L+4*channel, off & 0xFF)
     self.i2c.write8(self.__LED0_OFF_H+4*channel, off >> 8)
+
+  def setPWMList(self, values):
+    "Sets all PWM channels simultaneous"
+    vals = []
+    for index, value in enumerate(values):
+        # expects longs
+        vals.append(0)
+        vals.append(value)
+
+        #self.i2c.write8(self.__LED0_ON_L+4*index, 0 & 0xFF)
+        #self.i2c.write8(self.__LED0_ON_H+4*index, 0 >> 8)
+        self.i2c.write8(self.__LED0_OFF_L+4*index, value & 0xFF)
+        self.i2c.write8(self.__LED0_OFF_H+4*index, value >> 8)
+
+    #logging.info('pwm vals %s' % vals)
+    # split up the vals
+    # self.i2c.writeList(self.__LED0_ON_L, vals)
 
   def setAllPWM(self, on, off):
     "Sets a all PWM channels"
