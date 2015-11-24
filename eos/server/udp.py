@@ -74,7 +74,7 @@ ERROR_PANIC = '\xFF' # panic mode doesn't work??
 # Try to create the UDP socket
 try:
     socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    socket.setblocking(0)
+    #socket.setblocking(0) # non-blocking socket
     logging.info('Socket created')
 except socket.error, msg :
     logging.info('Failed to create socket. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
@@ -82,7 +82,7 @@ except socket.error, msg :
 
 # Try to create Driver
 try:
-    eos = EOS_Driver()
+    eos = EOS_Driver(debug = True)
 except Exception, e:
     logging.warn('Failed to initialize halogen driver. Exiting!')
     sys.exit()
@@ -178,6 +178,7 @@ def act_on(data, addr):
 
     # call the API
     if ack == MESSAGE_HALOGEN :
+        #eos.setRaw(light_values)
         try:
             eos.setRaw(light_values)
         except Exception, error_msg:
@@ -190,8 +191,6 @@ def act_on(data, addr):
         except Exception, error_msg:
             logging.warn('Something went wrong in the EOS LED API: %s', error_msg)
             return ERROR_START + ERROR_L_API + pack_seq
-
-
 
     # set the current sequence number to the one retrieved from the message
     seq_counters[addr] = msg['seq_number']
@@ -219,11 +218,18 @@ def main():
     # now keep talking with the client
     while 1:
         # receive data from client (data, addr)
+        t0 = time.time()
         try:
-            d = socket.recvfrom(1024)
+            d = socket.recvfrom(512)
         except Exception:
             # no data here
+            logging.info('cant receive from socket')
             continue
+
+        t1 = time.time()
+
+        totaltime = t1-t0
+        # logging.info('socket time %s' % totaltime)
 
         data = d[0]
         addr = d[1]
@@ -243,15 +249,29 @@ def main():
         #logging.info("Receive some data")
         #logging.info(to_hex(data))
 
+        # timing info
+        t0 = time.time()
+
         reply = act_on(data, addr[0])
 
+        t1 = time.time()
+
+        totaltime = t1-t0
+        # logging.info('action time %s' % totaltime)
+
+        # send reply from API to client
         socket.sendto(reply, addr)
 
+        total_dropped = 0
         # empty data in socket
-        while 1:
+        while 0:
             inputready, o, e = select.select([socket],[],[], 0.0)
-            if len(inputready)==0: break
-            for s in inputready: s.recv(1)
+            if len(inputready) == 0:
+                break
+            for s in inputready:
+                s.recv(1)
+                total_dropped += 1
+                # logging.info('dropping %s' % total_dropped )
 
     socket.close()
 
