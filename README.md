@@ -1,7 +1,7 @@
 # EosPython
 Python, REST and websocket I2C Raspberry Pi interface with [AdaFruit PWM Driver](http://www.adafruit.com/products/815).
 
-## Server
+## HTTP Server
 EosPython comes with a simple webserver, both with an REST API and websocket interface. It includes an admin interface 
 that communicates with the server using [SockJS](http://sockjs.org).
 
@@ -19,9 +19,27 @@ The server port defaults to `5153` and can be configured using the following env
     
 To run the server on your Raspberry PI, navigate to the main directory and
 
-    sudo python socketserver.py
+    sudo wsd
 
 You can then navigate to the web interface on the pre-defined port or write your own websocket interface!
+
+## TCP Server
+For faster communication directly with the api you can run the TCP server. By default it starts on port 5154. The TCP server
+provides a direct interface to the EOS API with JSON-based messages.
+
+To start it, run:
+
+    sudo tcpd
+    
+## UDP Server
+
+When you want fast, real-time communication with EOS, you should use the UDP server. It allows for sending binary messages,
+but it only has functionality for updating all the halogens and the leds at once. You will have to write your own 
+higher-level API for it. An implementation in Javascript can be found in the [EosNode](https://github.com/rulkens/EosNode).
+
+Run the server:
+
+    sudo udpd
 
 ## Eos Hardware
 The EOS lamp contains 32 10W, 12V halogen lights. All of them can be switched by applying a 5V voltage to their 
@@ -50,12 +68,13 @@ Install the kernel support for I2C using `raspbian-config`
 
     sudo raspi-config
  
-
+ 
 The PWM drivers use the bus numbers `0x40` and `0x41`. You can check if the drivers are connected properly by running:
 
     sudo i2cdetect -y 1
     
 or
+    
     sudo ./testi2c.sh
     
 You should see something like this:
@@ -70,6 +89,31 @@ You should see something like this:
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     70: 70 -- -- -- -- -- -- --
 
+### I2C speed
+
+By default, the Raspberry Pi i2c module runs at 400KHz. 
+
+## Auto-starting servers
+
+By default, all three servers are started as daemons when the Raspberry Pi is turned on. This is done with a default 
+Linux subsystem, i.e. a file in `/etc/init.d/`. The files for this can be found in the `init.d/` folder. To install, copy
+them to the `/etc/init.d` directory:
+
+    sudo cp init.d/eoswsd /etc/init.d
+    sudo cp init.d/eostcpd /etc/init.d
+    sudo cp init.d/eosudpd /etc/init.d
+    
+Then add them to the default run level, so they get started at boot.
+
+    sudo update-rc.d eosudpd defaults
+    sudo update-rc.d eoswsd defaults
+    sudo update-rc.d eostcpd defaults
+
+You can also manually start, stop and restart a server:
+
+    sudo /etc/init.d/eoswsd start
+    sudo /etc/init.d/eoswsd stop
+    sudo /etc/init.d/eoswsd restart
 
 ## API
 The API is implemented in the `lib/api/EOS_API.py` file. It exposes a single function, called EOS_API and is used by
