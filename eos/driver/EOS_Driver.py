@@ -2,6 +2,7 @@
 
 from Adafruit_PWM_Servo_Driver import PWM
 import math
+import logging
 
 # ===========================================================================
 # Eos Driver Class - quite the low-level API
@@ -45,6 +46,8 @@ class EOS_Driver:
         # Initialise the PWM devices using the default address
         if self.debug: print "Initializing the drivers on ports %s and %s" % (self.PWM_DRIVER_ADDR1, self.PWM_DRIVER_ADDR2)
         self.pwms = [ PWM(self.PWM_DRIVER_ADDR1), PWM(self.PWM_DRIVER_ADDR2) ]
+        self.pwms[0].debug = self.debug
+        self.pwms[1].debug = self.debug
 
         # Set PWM frequency to predefined Hz
         if self.debug: print "Set PWM frequency to %s" % freq
@@ -94,8 +97,15 @@ class EOS_Driver:
 
     def setRaw(self, values):
         """set all lights to the raw (PWM) value in the list provided"""
+        vals = [ [0] * (self.NUM_LIGHTS/2), [0] * (self.NUM_LIGHTS/2) ];
         for index, value in enumerate(values):
-            self.oneRaw(index, value)
+            light = self.__getLightIndex(index)
+            vals[light[0]][light[1]] = value
+
+        self.pwms[0].setPWMList(vals[0])
+        self.pwms[1].setPWMList(vals[1])
+
+        self.status = values
         return self.status
 
     def all(self, value):
