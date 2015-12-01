@@ -1,5 +1,5 @@
 # EosPython
-Python, REST and websocket I2C Raspberry Pi interface with [AdaFruit PWM Driver](http://www.adafruit.com/products/815).
+Python REST, TCP, UDP and websocket I2C Raspberry Pi interface with [AdaFruit PWM Driver](http://www.adafruit.com/products/815).
 
 ## HTTP Server
 EosPython comes with a simple webserver, both with an REST API and websocket interface. It includes an admin interface 
@@ -91,7 +91,32 @@ You should see something like this:
 
 ### I2C speed
 
-By default, the Raspberry Pi i2c module runs at 400KHz. 
+By default, the Raspberry Pi i2c module runs at 100KHz. Sending the PWM values to the drivers with this speed takes about
+24ms. This equals to a framerate of about 42 fps, which is quite slow. By increasing the baudrate for i2c and improving
+the code for sending values (only update the off bytes of the PWM signal) one update cycle runs in about 8-10ms. This can
+support a framerate of around 100-120fps.
+
+Setting the I2C framerate is done in the `/boot/settings.txt` file. Add this line to the end:
+
+    dtparam=i2c1_baudrate=400000
+
+This sets the baudrate to 400KHz. Then reboot!
+
+    sudo reboot
+    
+
+
+## Foot interface
+
+On the bottom of the lamp you will see a circular LED strip that can be used to control the lights directly on the lamp.
+It uses an Arduino that is connected with a serial interface to the Raspberry Pi and has it's own protocol for sending
+and receiving messages.
+
+The LED ring is a 12-LED Neopixel ring that is controlled with the Arduino Duemilenova. The sketch can be found in the
+`arduino` folder. To make sure you can communicate with the Arduino, install the Arduino and PySerial library:
+
+    sudo apt-get install arduino
+    sudo apt-get install python-serial
 
 ## Auto-starting servers
 
