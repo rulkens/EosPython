@@ -6,7 +6,9 @@ import threading
 import signal
 import sys
 import random
-from eos.api.EOS_API import EOS_API
+
+from tornado.ioloop import IOLoop
+from tornado.tcpserver import TCPServer
 
 # wait while the arduino resets
 
@@ -74,12 +76,16 @@ def on_touch_xl():
     logging.info('touch extra long')
     # end the app?
     # turn off all lights
+
+    # TODO: call TCP
     EOS_API('alloff')
     prevent_tap = True
     set_state('OK')
 
 def set_state(state):
     ser.write('setState ' + str(STATE[state]))
+
+class SerialServer(TCPServer):
 
 class SerialThread(threading.Thread):
     def __init__(self, queue, out_queue):
@@ -159,6 +165,21 @@ class RandomErrorThread(threading.Thread):
 
 t_serial = SerialThread(queue, out_queue)
 t_error = RandomErrorThread()
+
+def main():
+    """main application entry point"""
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    socket_port = int(os.getenv('EOS_TCP_PORT', 5154))
+
+    logging.info('listening on port %s' % socket_port)
+
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+    server = SerialServer()
+    server.listen(socket_port)
+    IOLoop.instance().start()
+    IOLoop.instance().close()
 
 def main():
     # main entry point
