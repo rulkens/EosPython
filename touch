@@ -1,0 +1,6 @@
+#!/usr/bin/python
+
+# ARDUINO UDP Socket DAEMON
+from eos.server.touch import main
+# run server
+main()
