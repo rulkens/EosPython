@@ -15,15 +15,15 @@ PYTHON_EXEC=$(which python)
 # REDHAT chkconfig header
 
 # chkconfig: - 58 74
-# description: eosserver is the script for starting a $DAEMON_NAME on boot.
+# description: eostouchd is the script for starting a $DAEMON_NAME on boot.
 ### BEGIN INIT INFO
-# Provides: eostcpd
+# Provides: eostouchd
 # Required-Start:    $network $remote_fs $local_fs
 # Required-Stop:     $network $remote_fs $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: start and stop eos tcp socket server
-# Description: Eos tcp server
+# Short-Description: start and stop eos touch socket server
+# Description: Eos touch server
 ### END INIT INFO
 
 ###############
