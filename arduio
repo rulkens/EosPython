@@ -1,6 +1,0 @@
-#!/usr/bin/python
-
-# ARDUINO TCP SOCKET DAEMON
-from eos.server.arduio import main
-# run server
-main()
